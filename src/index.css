@@ -8,35 +8,53 @@ All colors MUST be HSL.
 
 @layer base {
   :root {
-    --background: 0 0% 100%;
-    --foreground: 222.2 84% 4.9%;
+    /* Heart-healthy palette: warm cream + deep berry + leaf green */
+    --background: 36 40% 97%;
+    --foreground: 160 25% 12%;
 
     --card: 0 0% 100%;
-    --card-foreground: 222.2 84% 4.9%;
+    --card-foreground: 160 25% 12%;
 
     --popover: 0 0% 100%;
-    --popover-foreground: 222.2 84% 4.9%;
+    --popover-foreground: 160 25% 12%;
 
-    --primary: 222.2 47.4% 11.2%;
-    --primary-foreground: 210 40% 98%;
+    --primary: 350 72% 42%;            /* berry red — heart */
+    --primary-foreground: 36 40% 97%;
+    --primary-glow: 350 80% 58%;
 
-    --secondary: 210 40% 96.1%;
-    --secondary-foreground: 222.2 47.4% 11.2%;
+    --secondary: 150 40% 28%;          /* deep leaf */
+    --secondary-foreground: 36 40% 97%;
 
-    --muted: 210 40% 96.1%;
-    --muted-foreground: 215.4 16.3% 46.9%;
+    --muted: 36 25% 92%;
+    --muted-foreground: 160 12% 38%;
 
-    --accent: 210 40% 96.1%;
-    --accent-foreground: 222.2 47.4% 11.2%;
+    --accent: 35 90% 55%;              /* turmeric */
+    --accent-foreground: 160 25% 12%;
 
-    --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 210 40% 98%;
+    --destructive: 0 75% 50%;
+    --destructive-foreground: 36 40% 97%;
 
-    --border: 214.3 31.8% 91.4%;
-    --input: 214.3 31.8% 91.4%;
-    --ring: 222.2 84% 4.9%;
+    --warning: 28 92% 52%;
+    --warning-foreground: 36 40% 97%;
 
-    --radius: 0.5rem;
+    --success: 150 55% 38%;
+    --success-foreground: 36 40% 97%;
+
+    --border: 36 20% 86%;
+    --input: 36 20% 88%;
+    --ring: 350 72% 42%;
+
+    --radius: 1rem;
+
+    --gradient-hero: linear-gradient(135deg, hsl(350 72% 42% / 0.92), hsl(12 80% 50% / 0.85));
+    --gradient-warm: linear-gradient(180deg, hsl(36 40% 97%), hsl(36 50% 93%));
+    --gradient-leaf: linear-gradient(135deg, hsl(150 40% 28%), hsl(165 50% 35%));
+
+    --shadow-soft: 0 4px 20px -8px hsl(350 30% 20% / 0.15);
+    --shadow-card: 0 10px 40px -12px hsl(160 30% 20% / 0.18);
+    --shadow-glow: 0 20px 60px -20px hsl(350 72% 42% / 0.4);
+
+    --transition-smooth: cubic-bezier(0.4, 0, 0.2, 1);
 
     --sidebar-background: 0 0% 98%;
 
@@ -56,33 +74,25 @@ All colors MUST be HSL.
   }
 
   .dark {
-    --background: 222.2 84% 4.9%;
-    --foreground: 210 40% 98%;
-
-    --card: 222.2 84% 4.9%;
-    --card-foreground: 210 40% 98%;
-
-    --popover: 222.2 84% 4.9%;
-    --popover-foreground: 210 40% 98%;
-
-    --primary: 210 40% 98%;
-    --primary-foreground: 222.2 47.4% 11.2%;
-
-    --secondary: 217.2 32.6% 17.5%;
-    --secondary-foreground: 210 40% 98%;
-
-    --muted: 217.2 32.6% 17.5%;
-    --muted-foreground: 215 20.2% 65.1%;
-
-    --accent: 217.2 32.6% 17.5%;
-    --accent-foreground: 210 40% 98%;
-
-    --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 210 40% 98%;
-
-    --border: 217.2 32.6% 17.5%;
-    --input: 217.2 32.6% 17.5%;
-    --ring: 212.7 26.8% 83.9%;
+    --background: 160 25% 8%;
+    --foreground: 36 40% 95%;
+    --card: 160 25% 11%;
+    --card-foreground: 36 40% 95%;
+    --popover: 160 25% 11%;
+    --popover-foreground: 36 40% 95%;
+    --primary: 350 80% 58%;
+    --primary-foreground: 36 40% 97%;
+    --secondary: 150 40% 28%;
+    --secondary-foreground: 36 40% 97%;
+    --muted: 160 20% 18%;
+    --muted-foreground: 36 15% 70%;
+    --accent: 35 90% 55%;
+    --accent-foreground: 160 25% 12%;
+    --destructive: 0 75% 50%;
+    --destructive-foreground: 36 40% 97%;
+    --border: 160 20% 20%;
+    --input: 160 20% 20%;
+    --ring: 350 80% 58%;
     --sidebar-background: 240 5.9% 10%;
     --sidebar-foreground: 240 4.8% 95.9%;
     --sidebar-primary: 224.3 76.3% 48%;
@@ -101,5 +111,13 @@ All colors MUST be HSL.
 
   body {
     @apply bg-background text-foreground;
+    font-family: 'Inter', system-ui, sans-serif;
+    font-feature-settings: 'cv02', 'cv03', 'cv04';
+  }
+
+  h1, h2, h3, h4, .font-display {
+    font-family: 'Fraunces', Georgia, serif;
+    font-optical-sizing: auto;
+    letter-spacing: -0.01em;
   }
 }
