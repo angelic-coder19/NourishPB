@@ -2,6 +2,7 @@ import { NavLink, Outlet } from "react-router-dom";
 import { Heart, Menu, X } from "lucide-react";
 import { useState } from "react";
 import { cn } from "@/lib/utils";
+import StatBanner from "@/components/StatBanner";
 
 const navItems = [
   { to: "/", label: "Home" },
@@ -14,6 +15,7 @@ const Layout = () => {
   const [open, setOpen] = useState(false);
   return (
     <div className="min-h-screen flex flex-col bg-background">
+      <StatBanner />
       <header className="sticky top-0 z-40 backdrop-blur-md bg-background/80 border-b border-border/60">
         <div className="container flex items-center justify-between h-16">
           <NavLink to="/" className="flex items-center gap-2 group">
