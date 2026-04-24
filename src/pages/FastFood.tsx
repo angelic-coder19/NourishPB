@@ -17,12 +17,15 @@ const FFCard = ({ item }: { item: FastFoodItem }) => (
   <article className="rounded-2xl bg-card border border-border/60 shadow-soft hover:shadow-card transition-all duration-300 hover:-translate-y-1 overflow-hidden group">
     <div className="relative aspect-[16/9] overflow-hidden bg-muted">
       <img src={item.image} alt={item.meal} loading="lazy" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
-      <div className={`absolute top-3 left-3 w-11 h-11 rounded-full ${item.brandColor} text-white font-display font-bold text-lg flex items-center justify-center shadow-card border-2 border-white`}>
-        {item.initials}
+      <div className="absolute top-3 left-3 w-12 h-12 rounded-full bg-white flex items-center justify-center shadow-card border-2 border-white p-1.5">
+        <img src={item.logo} alt={`${item.restaurant} logo`} loading="lazy" className="max-w-full max-h-full object-contain" />
       </div>
       <div className="absolute top-3 right-3 px-3 py-1.5 rounded-full bg-card/95 backdrop-blur shadow-soft">
         <HeartRating value={item.hearts} />
       </div>
+      <span className="absolute bottom-3 left-3 px-2.5 py-1 rounded-full bg-primary text-primary-foreground text-[10px] uppercase tracking-wider font-semibold shadow-soft">
+        Pine Bluff Location
+      </span>
     </div>
     <div className="p-5">
       <p className="text-xs uppercase tracking-wider text-muted-foreground font-semibold">{item.restaurant}</p>
