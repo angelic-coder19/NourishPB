@@ -106,7 +106,7 @@ const Index = () => {
           title="Find these foods in Pine Bluff"
           subtitle="Local stores stocking the ingredients you need to start eating heart-smart today."
         >
-          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-4">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
             {stores.map((store) => (
               <a
                 key={store.name}
@@ -115,14 +115,15 @@ const Index = () => {
                 rel="noopener noreferrer"
                 className="group rounded-2xl bg-secondary-foreground/5 hover:bg-secondary-foreground/10 border border-secondary-foreground/10 p-5 flex flex-col items-center gap-3 text-center transition-all hover:-translate-y-1"
               >
-                <div className={`w-16 h-16 rounded-2xl ${store.color} text-white font-display font-bold text-2xl flex items-center justify-center shadow-soft`}>
-                  {store.initials}
+                <div className="w-20 h-20 rounded-2xl bg-white flex items-center justify-center shadow-soft p-3">
+                  <img src={store.logo} alt={`${store.name} logo`} loading="lazy" className="max-w-full max-h-full object-contain" />
                 </div>
                 <div>
                   <p className="font-semibold text-sm">{store.name}</p>
                   <p className="text-xs text-secondary-foreground/70 inline-flex items-center gap-1 mt-1">
                     <MapPin className="w-3 h-3" /> Pine Bluff, AR
                   </p>
+                  <p className="text-xs text-secondary-foreground/80 mt-2 leading-snug">{store.tip}</p>
                 </div>
               </a>
             ))}
