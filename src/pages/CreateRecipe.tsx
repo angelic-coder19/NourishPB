@@ -1,8 +1,133 @@
 import { useMemo, useState } from "react";
-import { DollarSign, Sparkles, AlertTriangle, Send, Mic, Image as ImageIcon } from "lucide-react";
+import { DollarSign, Sparkles, AlertTriangle, Send, Mic, Image as ImageIcon, ShoppingCart, ExternalLink } from "lucide-react";
 import { meals, unhealthyIngredients, Meal } from "@/data/content";
 import RecipeDetailCard from "@/components/RecipeDetailCard";
 import { toast } from "@/hooks/use-toast";
+import mealLentil from "@/assets/meal-lentil.jpg";
+import mealSalmon from "@/assets/meal-salmon.jpg";
+import mealChickpea from "@/assets/meal-chickpea.jpg";
+
+type BudgetMeal = {
+  name: string;
+  image: string;
+  ingredients: { name: string; price: number }[];
+  total: number;
+  instructions: string[];
+  searchTerm: string;
+};
+
+const budgetMeals: BudgetMeal[] = [
+  {
+    name: "Hearty Black Bean & Brown Rice Bowl",
+    image: mealLentil,
+    searchTerm: "black beans",
+    ingredients: [
+      { name: "Black beans (1 can)", price: 1.28 },
+      { name: "Brown rice", price: 1.5 },
+      { name: "Garlic", price: 0.98 },
+      { name: "Olive oil (per portion)", price: 0.5 },
+      { name: "Cumin spice", price: 0.3 },
+    ],
+    total: 4.56,
+    instructions: [
+      "Rinse and drain black beans.",
+      "Cook brown rice per package instructions.",
+      "Sauté garlic in olive oil for 2 minutes.",
+      "Add beans, cumin, and salt-free seasoning; cook 5 minutes.",
+      "Serve beans over rice, top with fresh lime if available.",
+    ],
+  },
+  {
+    name: "Baked Lemon Herb Salmon with Greens",
+    image: mealSalmon,
+    searchTerm: "salmon",
+    ingredients: [
+      { name: "Salmon fillet", price: 6.0 },
+      { name: "Fresh spinach", price: 2.5 },
+      { name: "Garlic", price: 0.98 },
+      { name: "Lemon", price: 0.5 },
+      { name: "Olive oil", price: 0.75 },
+      { name: "Brown rice", price: 1.5 },
+    ],
+    total: 12.23,
+    instructions: [
+      "Preheat oven to 400°F.",
+      "Season salmon with lemon juice, garlic, and herbs.",
+      "Bake 12–15 minutes until flaky.",
+      "Sauté spinach in olive oil 3 minutes.",
+      "Serve over brown rice.",
+    ],
+  },
+  {
+    name: "Heart-Healthy Smothered Turkey & Collard Greens",
+    image: mealChickpea,
+    searchTerm: "ground turkey",
+    ingredients: [
+      { name: "Ground turkey", price: 5.0 },
+      { name: "Collard greens", price: 2.0 },
+      { name: "Onion", price: 0.75 },
+      { name: "Garlic", price: 0.98 },
+      { name: "Low-sodium broth", price: 1.5 },
+      { name: "Brown rice", price: 1.5 },
+      { name: "Olive oil", price: 0.75 },
+      { name: "Whole grain bread", price: 2.5 },
+    ],
+    total: 14.98,
+    instructions: [
+      "Brown ground turkey in olive oil with onion and garlic.",
+      "Add low-sodium broth and simmer 10 minutes.",
+      "Wash and chop collard greens; cook in a separate pan 20 minutes.",
+      "Season with apple cider vinegar and smoked paprika (no salt).",
+      "Serve over brown rice with whole grain bread.",
+    ],
+  },
+];
+
+const pickBudgetMeal = (amount: number): BudgetMeal => {
+  if (amount < 10) return budgetMeals[0];
+  if (amount < 20) return budgetMeals[1];
+  return budgetMeals[2];
+};
+
+const walmartUrl = (q: string) => `https://www.walmart.com/search?q=${encodeURIComponent(q)}`;
+
+const BudgetMealCard = ({ meal }: { meal: BudgetMeal }) => (
+  <article className="rounded-2xl bg-card border border-border/60 shadow-card overflow-hidden animate-scale-in">
+    <div className="aspect-[16/9] overflow-hidden bg-muted">
+      <img src={meal.image} alt={meal.name} className="w-full h-full object-cover" />
+    </div>
+    <div className="p-6">
+      <h3 className="font-display text-2xl font-semibold mb-4">{meal.name}</h3>
+      <div className="text-xs uppercase tracking-wider text-secondary font-semibold mb-2">Core Ingredients</div>
+      <ul className="space-y-1.5 mb-4">
+        {meal.ingredients.map((i) => (
+          <li key={i.name} className="text-sm flex justify-between gap-3">
+            <span className="font-medium">{i.name}</span>
+            <span className="text-muted-foreground tabular-nums">${i.price.toFixed(2)}</span>
+          </li>
+        ))}
+      </ul>
+      <div className="flex items-center justify-between border-t border-border/60 pt-3 mb-5">
+        <span className="text-sm font-semibold">Total estimated cost</span>
+        <span className="font-display text-lg font-semibold text-primary">~${meal.total.toFixed(2)}</span>
+      </div>
+      <a
+        href={walmartUrl(meal.searchTerm)}
+        target="_blank"
+        rel="noopener noreferrer"
+        className="inline-flex items-center gap-2 h-11 px-5 rounded-full bg-primary text-primary-foreground font-semibold shadow-soft hover:shadow-glow transition-shadow mb-5"
+      >
+        <ShoppingCart className="w-4 h-4" /> Shop at Walmart <ExternalLink className="w-3.5 h-3.5" />
+      </a>
+      <div className="text-xs uppercase tracking-wider text-secondary font-semibold mb-2">Instructions</div>
+      <ol className="space-y-2 list-decimal list-inside text-sm">
+        {meal.instructions.map((step, i) => (
+          <li key={i} className="leading-relaxed">{step}</li>
+        ))}
+      </ol>
+    </div>
+  </article>
+);
 
 const PageHeader = ({ eyebrow, title, subtitle }: { eyebrow: string; title: string; subtitle: string }) => (
   <div className="container pt-12 md:pt-16 pb-6 max-w-3xl">
@@ -51,7 +176,7 @@ const matchByIngredients = (text: string): Meal => {
 
 const CreateRecipe = () => {
   const [budget, setBudget] = useState("");
-  const [budgetMeal, setBudgetMeal] = useState<Meal | null>(null);
+  const [budgetMeal, setBudgetMeal] = useState<BudgetMeal | null>(null);
 
   const [ingredients, setIngredients] = useState("");
   const [ingResult, setIngResult] = useState<{ meal: Meal; warnings: { name: string; reason: string }[] } | null>(null);
@@ -63,7 +188,7 @@ const CreateRecipe = () => {
       toast({ title: "Enter an amount", description: "Please enter a dollar amount greater than 0." });
       return;
     }
-    setBudgetMeal(pickByBudget(n));
+    setBudgetMeal(pickBudgetMeal(n));
   };
 
   const handleIngredients = (e: React.FormEvent) => {
@@ -128,7 +253,7 @@ const CreateRecipe = () => {
             </button>
           </form>
           {budgetMeal ? (
-            <RecipeDetailCard meal={budgetMeal} />
+            <BudgetMealCard meal={budgetMeal} />
           ) : (
             <div className="rounded-2xl bg-muted/50 p-8 text-center text-muted-foreground">
               <Sparkles className="w-8 h-8 mx-auto mb-2 text-primary" />
