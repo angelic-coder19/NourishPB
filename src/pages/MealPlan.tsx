@@ -1,10 +1,202 @@
 import { useMemo, useRef, useState } from "react";
-import { Download, Sparkles, X } from "lucide-react";
-import { meals, Meal } from "@/data/content";
-import RecipeDetailCard from "@/components/RecipeDetailCard";
+import { Download, Sparkles, X, ShoppingCart, ExternalLink } from "lucide-react";
 import jsPDF from "jspdf";
 import html2canvas from "html2canvas";
 import { toast } from "@/hooks/use-toast";
+import mealOatmeal from "@/assets/meal-oatmeal.jpg";
+import mealLentil from "@/assets/meal-lentil.jpg";
+import mealSalmon from "@/assets/meal-salmon.jpg";
+import mealChickpea from "@/assets/meal-chickpea.jpg";
+
+type PlanMeal = {
+  name: string;
+  description: string;
+  image: string;
+  ingredients: { name: string; price: number }[];
+  total: number;
+  instructions: string[];
+  searchTerm: string;
+};
+
+const breakfastOptions: PlanMeal[] = [
+  {
+    name: "Oatmeal with Blueberries",
+    description: "Beta-glucan oats and antioxidant berries.",
+    image: mealOatmeal,
+    searchTerm: "oats",
+    ingredients: [
+      { name: "Rolled oats", price: 0.35 },
+      { name: "Blueberries", price: 1.25 },
+      { name: "Walnuts", price: 0.6 },
+    ],
+    total: 2.2,
+    instructions: [
+      "Bring 1 cup water to a boil and stir in oats.",
+      "Simmer 5 minutes until creamy.",
+      "Top with blueberries and walnuts.",
+    ],
+  },
+  {
+    name: "Whole Grain Toast & Eggs",
+    description: "Fiber bread with lean protein.",
+    image: mealOatmeal,
+    searchTerm: "whole grain bread",
+    ingredients: [
+      { name: "Whole grain bread", price: 2.5 },
+      { name: "Eggs", price: 1.5 },
+      { name: "Olive oil", price: 0.5 },
+    ],
+    total: 4.5,
+    instructions: [
+      "Toast 2 slices of whole grain bread.",
+      "Cook eggs in olive oil to your liking.",
+      "Serve together with cracked pepper.",
+    ],
+  },
+  {
+    name: "Greek Yogurt & Walnuts",
+    description: "Probiotics with omega-3-rich nuts.",
+    image: mealOatmeal,
+    searchTerm: "greek yogurt",
+    ingredients: [
+      { name: "Greek yogurt", price: 1.75 },
+      { name: "Walnuts", price: 0.6 },
+      { name: "Honey", price: 0.2 },
+    ],
+    total: 2.55,
+    instructions: [
+      "Spoon yogurt into a bowl.",
+      "Top with walnuts and a drizzle of honey.",
+    ],
+  },
+];
+
+const lunchOptions: PlanMeal[] = [
+  {
+    name: "Black Bean & Rice Bowl",
+    description: "Plant protein over fiber-rich brown rice.",
+    image: mealLentil,
+    searchTerm: "black beans",
+    ingredients: [
+      { name: "Black beans (1 can)", price: 1.28 },
+      { name: "Brown rice", price: 1.5 },
+      { name: "Garlic", price: 0.98 },
+      { name: "Olive oil", price: 0.5 },
+    ],
+    total: 4.26,
+    instructions: [
+      "Cook brown rice per package instructions.",
+      "Sauté garlic in olive oil 2 minutes.",
+      "Add beans and warm through.",
+      "Serve over rice with lime.",
+    ],
+  },
+  {
+    name: "Grilled Chicken Salad",
+    description: "Lean protein over leafy greens.",
+    image: mealChickpea,
+    searchTerm: "chicken breast",
+    ingredients: [
+      { name: "Chicken breast", price: 4.0 },
+      { name: "Mixed greens", price: 2.0 },
+      { name: "Olive oil", price: 0.5 },
+    ],
+    total: 6.5,
+    instructions: [
+      "Grill seasoned chicken 6 minutes per side.",
+      "Slice over greens.",
+      "Dress with olive oil and lemon.",
+    ],
+  },
+  {
+    name: "Lentil Soup",
+    description: "Plant protein and fiber for blood pressure.",
+    image: mealLentil,
+    searchTerm: "lentils",
+    ingredients: [
+      { name: "Green lentils", price: 0.75 },
+      { name: "Carrots", price: 0.45 },
+      { name: "Spinach", price: 1.2 },
+      { name: "Garlic", price: 0.3 },
+    ],
+    total: 2.7,
+    instructions: [
+      "Sauté carrots and garlic 5 minutes.",
+      "Add lentils and low-sodium broth; simmer 25 min.",
+      "Stir in spinach until wilted.",
+    ],
+  },
+];
+
+const dinnerOptions: PlanMeal[] = [
+  {
+    name: "Baked Salmon & Greens",
+    description: "Omega-3s with leafy nitrates.",
+    image: mealSalmon,
+    searchTerm: "salmon",
+    ingredients: [
+      { name: "Salmon fillet", price: 6.0 },
+      { name: "Fresh spinach", price: 2.5 },
+      { name: "Lemon", price: 0.5 },
+      { name: "Olive oil", price: 0.75 },
+      { name: "Brown rice", price: 1.5 },
+    ],
+    total: 11.25,
+    instructions: [
+      "Preheat oven to 400°F.",
+      "Season salmon with lemon, garlic, herbs.",
+      "Bake 12–15 minutes until flaky.",
+      "Sauté spinach in olive oil 3 minutes.",
+      "Serve over brown rice.",
+    ],
+  },
+  {
+    name: "Smothered Turkey & Collard Greens",
+    description: "Southern flavor, heart-healthy build.",
+    image: mealChickpea,
+    searchTerm: "ground turkey",
+    ingredients: [
+      { name: "Ground turkey", price: 5.0 },
+      { name: "Collard greens", price: 2.0 },
+      { name: "Onion", price: 0.75 },
+      { name: "Garlic", price: 0.98 },
+      { name: "Low-sodium broth", price: 1.5 },
+      { name: "Brown rice", price: 1.5 },
+    ],
+    total: 11.73,
+    instructions: [
+      "Brown ground turkey in olive oil with onion and garlic.",
+      "Add low-sodium broth, simmer 10 minutes.",
+      "Cook collard greens in a separate pan 20 minutes.",
+      "Season with apple cider vinegar and smoked paprika.",
+      "Serve over brown rice.",
+    ],
+  },
+  {
+    name: "Garlic Chicken & Brown Rice",
+    description: "Lean protein with fiber-rich grains.",
+    image: mealChickpea,
+    searchTerm: "chicken",
+    ingredients: [
+      { name: "Chicken breast", price: 4.0 },
+      { name: "Garlic", price: 0.98 },
+      { name: "Brown rice", price: 1.5 },
+      { name: "Olive oil", price: 0.75 },
+    ],
+    total: 7.23,
+    instructions: [
+      "Sauté garlic in olive oil 1 minute.",
+      "Add chicken; cook 6 minutes per side.",
+      "Serve over brown rice.",
+    ],
+  },
+];
+
+const sources: Record<MealType, PlanMeal[]> = {
+  breakfast: breakfastOptions,
+  lunch: lunchOptions,
+  dinner: dinnerOptions,
+};
 
 type Group = "family" | "individual" | "school" | "organization";
 type Period = "daily" | "weekly";
@@ -19,7 +211,9 @@ const groupOptions: { value: Group; label: string }[] = [
 
 const days = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
 
-const pick = (arr: Meal[], i: number) => arr[i % arr.length];
+const pick = (arr: PlanMeal[], i: number) => arr[i % arr.length];
+
+const walmartUrl = (q: string) => `https://www.walmart.com/search?q=${encodeURIComponent(q)}`;
 
 const MealPlan = () => {
   const [group, setGroup] = useState<Group>("family");
@@ -28,7 +222,7 @@ const MealPlan = () => {
   const [period, setPeriod] = useState<Period>("weekly");
   const [mealTypes, setMealTypes] = useState<MealType[]>(["breakfast", "lunch", "dinner"]);
   const [generated, setGenerated] = useState(false);
-  const [open, setOpen] = useState<Meal | null>(null);
+  const [open, setOpen] = useState<PlanMeal | null>(null);
   const tableRef = useRef<HTMLDivElement>(null);
 
   const cols = period === "daily" ? 1 : 7;
@@ -36,17 +230,7 @@ const MealPlan = () => {
 
   const plan = useMemo(() => {
     if (!generated) return null;
-    const breakfasts = meals.filter((m) => m.tags?.includes("breakfast")).length
-      ? meals.filter((m) => m.tags?.includes("breakfast"))
-      : meals;
-    const lunches = meals.filter((m) => m.tags?.includes("lunch")).length
-      ? meals.filter((m) => m.tags?.includes("lunch"))
-      : meals;
-    const dinners = meals.filter((m) => m.tags?.includes("dinner")).length
-      ? meals.filter((m) => m.tags?.includes("dinner"))
-      : meals;
-    const sources: Record<MealType, Meal[]> = { breakfast: breakfasts, lunch: lunches, dinner: dinners };
-    const rows: { type: MealType; cells: Meal[] }[] = mealTypes.map((t) => ({
+    const rows: { type: MealType; cells: PlanMeal[] }[] = mealTypes.map((t) => ({
       type: t,
       cells: Array.from({ length: cols }, (_, i) => pick(sources[t], i + (t === "lunch" ? 1 : t === "dinner" ? 2 : 0))),
     }));
@@ -56,7 +240,7 @@ const MealPlan = () => {
   const totalCost = useMemo(() => {
     if (!plan) return 0;
     const ppl = parseInt(people) || 1;
-    const sum = plan.reduce((s, r) => s + r.cells.reduce((cs, m) => cs + m.cost, 0), 0);
+    const sum = plan.reduce((s, r) => s + r.cells.reduce((cs, m) => cs + m.total, 0), 0);
     return sum * ppl;
   }, [plan, people]);
 
@@ -197,10 +381,11 @@ const MealPlan = () => {
                       <div className="aspect-[4/3] overflow-hidden bg-muted">
                         <img src={m.image} alt={m.name} loading="lazy" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
                       </div>
-                      <div className="p-3">
-                        <p className="font-medium text-sm leading-snug">{m.name}</p>
-                        <p className="text-xs text-muted-foreground mt-1">${m.cost.toFixed(2)}/serving</p>
-                      </div>
+                       <div className="p-3">
+                         <p className="font-medium text-sm leading-snug">{m.name}</p>
+                         <p className="text-xs text-muted-foreground mt-1 leading-snug line-clamp-2">{m.description}</p>
+                         <p className="text-xs text-primary font-semibold mt-1">~${m.total.toFixed(2)}/serving</p>
+                       </div>
                     </button>
                   ))}
                 </div>
@@ -215,7 +400,7 @@ const MealPlan = () => {
           className="fixed inset-0 z-50 bg-foreground/60 backdrop-blur-sm flex items-center justify-center p-4 animate-fade-in-up"
           onClick={() => setOpen(null)}
         >
-          <div className="relative max-w-3xl w-full" onClick={(e) => e.stopPropagation()}>
+          <div className="relative max-w-3xl w-full max-h-[90vh] overflow-y-auto" onClick={(e) => e.stopPropagation()}>
             <button
               onClick={() => setOpen(null)}
               className="absolute -top-3 -right-3 z-10 w-10 h-10 rounded-full bg-card shadow-card flex items-center justify-center hover:bg-muted"
@@ -223,7 +408,41 @@ const MealPlan = () => {
             >
               <X className="w-5 h-5" />
             </button>
-            <RecipeDetailCard meal={open} />
+            <article className="rounded-2xl bg-card border border-border/60 shadow-card overflow-hidden">
+              <div className="aspect-[16/9] overflow-hidden bg-muted">
+                <img src={open.image} alt={open.name} className="w-full h-full object-cover" />
+              </div>
+              <div className="p-6">
+                <h3 className="font-display text-2xl font-semibold mb-4">{open.name}</h3>
+                <div className="text-xs uppercase tracking-wider text-secondary font-semibold mb-2">Core Ingredients</div>
+                <ul className="space-y-1.5 mb-4">
+                  {open.ingredients.map((i) => (
+                    <li key={i.name} className="text-sm flex justify-between gap-3">
+                      <span className="font-medium">{i.name}</span>
+                      <span className="text-muted-foreground tabular-nums">${i.price.toFixed(2)}</span>
+                    </li>
+                  ))}
+                </ul>
+                <div className="flex items-center justify-between border-t border-border/60 pt-3 mb-5">
+                  <span className="text-sm font-semibold">Total estimated cost</span>
+                  <span className="font-display text-lg font-semibold text-primary">~${open.total.toFixed(2)}</span>
+                </div>
+                <a
+                  href={walmartUrl(open.searchTerm)}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-2 h-11 px-5 rounded-full bg-primary text-primary-foreground font-semibold shadow-soft hover:shadow-glow transition-shadow mb-5"
+                >
+                  <ShoppingCart className="w-4 h-4" /> Shop at Walmart <ExternalLink className="w-3.5 h-3.5" />
+                </a>
+                <div className="text-xs uppercase tracking-wider text-secondary font-semibold mb-2">Instructions</div>
+                <ol className="space-y-2 list-decimal list-inside text-sm">
+                  {open.instructions.map((step, i) => (
+                    <li key={i} className="leading-relaxed">{step}</li>
+                  ))}
+                </ol>
+              </div>
+            </article>
           </div>
         </div>
       )}

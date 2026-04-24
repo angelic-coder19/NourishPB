@@ -1,5 +1,8 @@
 import { Meal } from "@/data/content";
-import { Sparkles } from "lucide-react";
+import { Sparkles, ShoppingCart, ExternalLink } from "lucide-react";
+
+const walmartUrl = (q: string) => `https://www.walmart.com/search?q=${encodeURIComponent(q)}`;
+const shortName = (name: string) => name.split(/[(,]/)[0].trim();
 
 const MealCard = ({ meal }: { meal: Meal }) => {
   return (
@@ -26,6 +29,30 @@ const MealCard = ({ meal }: { meal: Meal }) => {
             </li>
           ))}
         </ul>
+
+        <div className="mt-5 pt-4 border-t border-border/60">
+          <div className="flex items-center gap-2 text-xs uppercase tracking-wider text-primary font-semibold mb-2">
+            <ShoppingCart className="w-3.5 h-3.5" />
+            Shop These Ingredients
+          </div>
+          <div className="flex flex-wrap gap-2">
+            {meal.ingredients.map((ing) => {
+              const q = shortName(ing.name);
+              return (
+                <a
+                  key={ing.name}
+                  href={walmartUrl(q)}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-muted text-xs font-medium hover:bg-primary hover:text-primary-foreground transition-colors"
+                >
+                  {q}
+                  <ExternalLink className="w-3 h-3" />
+                </a>
+              );
+            })}
+          </div>
+        </div>
       </div>
     </article>
   );
