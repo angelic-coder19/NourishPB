@@ -218,23 +218,41 @@ export const fruits: Card2[] = [
 export type Store = {
   name: string;
   url: string;
-  initials: string;
-  color: string; // tailwind bg class
+  logo: string;
+  tip: string;
 };
 
 export const stores: Store[] = [
-  { name: "Walmart Supercenter", url: "https://www.walmart.com/store/finder?location=pine+bluff+ar", initials: "W", color: "bg-[hsl(210_85%_45%)]" },
-  { name: "Kroger", url: "https://www.kroger.com/stores/search?searchText=Pine+Bluff%2C+AR", initials: "K", color: "bg-[hsl(350_75%_42%)]" },
-  { name: "Save A Lot", url: "https://savealot.com/stores", initials: "SL", color: "bg-[hsl(28_92%_52%)]" },
-  { name: "ALDI", url: "https://stores.aldi.us/", initials: "A", color: "bg-[hsl(220_75%_35%)]" },
-  { name: "Harps Food Store", url: "https://www.harpsfood.com/stores", initials: "H", color: "bg-[hsl(150_55%_35%)]" },
+  {
+    name: "Walmart Supercenter",
+    url: "https://www.walmart.com",
+    logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/6/60/Walmart_spark_%282025%29.svg/1280px-Walmart_spark_%282025%29.svg.png",
+    tip: "Best for full ingredient selection & pickup/delivery",
+  },
+  {
+    name: "Super 1 Foods",
+    url: "https://www.instacart.com/store/super-1-foods/storefront",
+    logo: "https://play-lh.googleusercontent.com/YYyjR89xq7G2nqY95VTCJAvaNowo7dLADj9RBotMcrEYnyXGTV4DngQrngSYQV2y4Q",
+    tip: "Best for fresh produce & Southern staples",
+  },
+  {
+    name: "FoodSmart",
+    url: "https://www.foodsmart.com",
+    logo: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQPUan69as9EbVcdnilcpSeiA5ErvaIx5_Lag&s",
+    tip: "Best for budget-friendly healthy options",
+  },
+  {
+    name: "Walgreens",
+    url: "https://www.walgreens.com",
+    logo: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRqBfQX1bNXXVK-2w_xOvC0QNpxdoDYxGfBYQ&s",
+    tip: "Best for vitamins, supplements & heart-health items",
+  },
 ];
 
 export type FastFoodItem = {
   id: string;
   restaurant: string;
-  initials: string;
-  brandColor: string;
+  logo: string;
   meal: string;
   image: string;
   ingredients: { name: string; effect: string }[];
@@ -245,92 +263,70 @@ export const fastFoodItems: FastFoodItem[] = [
   {
     id: "ff1",
     restaurant: "Subway",
-    initials: "S",
-    brandColor: "bg-[hsl(150_75%_30%)]",
-    meal: "Oven-Roasted Turkey on 9-Grain Wheat",
+    logo: "https://logos-world.net/wp-content/uploads/2023/01/Subway-Logo.png",
+    meal: "6-inch Grilled Chicken on 9-Grain Wheat",
     image: ffTurkeySub,
     hearts: 5,
     ingredients: [
-      { name: "Whole grain bread", effect: "Fiber lowers LDL cholesterol" },
+      { name: "9-Grain wheat bread", effect: "Fiber lowers LDL cholesterol" },
+      { name: "Grilled chicken", effect: "Lean protein without saturated fat" },
+      { name: "Fresh avocado", effect: "Monounsaturated fats raise HDL" },
       { name: "Spinach + tomato", effect: "Nitrates and lycopene support arteries" },
-      { name: "Lean turkey", effect: "Protein without saturated fat" },
+      { name: "Skip creamy sauces", effect: "Avoids added saturated fat & sodium" },
     ],
   },
   {
     id: "ff2",
     restaurant: "Chick-fil-A",
-    initials: "C",
-    brandColor: "bg-[hsl(350_75%_45%)]",
-    meal: "Grilled Chicken Cool Wrap",
+    logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/0/02/Chick-fil-A_Logo.svg/1280px-Chick-fil-A_Logo.svg.png",
+    meal: "Grilled Nuggets + Fruit Cup (or Grilled Cool Wrap)",
     image: ffWrap,
     hearts: 4,
     ingredients: [
-      { name: "Grilled chicken", effect: "Lean protein, no frying oils" },
+      { name: "Grilled chicken", effect: "Lean protein, no frying oils that raise LDL" },
+      { name: "Fresh fruit cup", effect: "Antioxidants and fiber reduce inflammation" },
       { name: "Mixed greens", effect: "Antioxidants reduce inflammation" },
     ],
   },
   {
     id: "ff3",
-    restaurant: "Wendy's",
-    initials: "W",
-    brandColor: "bg-[hsl(350_70%_40%)]",
-    meal: "Grilled Chicken Salad (light dressing)",
-    image: ffGrilledChicken,
+    restaurant: "Arby's",
+    logo: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRUx9d3Ru-34SzUDRinOQ93jeM384X2auU3aQ&s",
+    meal: "Roast Turkey Sandwich (no creamy sauce, skip curly fries)",
+    image: ffTurkeySub,
     hearts: 4,
     ingredients: [
-      { name: "Grilled chicken breast", effect: "Lean protein, low saturated fat" },
-      { name: "Romaine + veggies", effect: "Folate and potassium aid blood pressure" },
+      { name: "Roast turkey", effect: "Lean protein, low saturated fat" },
+      { name: "No creamy sauce", effect: "Avoids extra saturated fat & calories" },
+      { name: "Skip curly fries", effect: "Reduces trans fat & sodium intake" },
     ],
   },
   {
     id: "ff4",
     restaurant: "McDonald's",
-    initials: "M",
-    brandColor: "bg-[hsl(35_95%_50%)]",
-    meal: "Egg White Delight + Apple Slices",
-    image: ffEggWrap,
+    logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/3/36/McDonald%27s_Golden_Arches.svg/1024px-McDonald%27s_Golden_Arches.svg.png",
+    meal: "Oatmeal (no toppings pack) + Side Salad with low-fat dressing",
+    image: ffParfait,
     hearts: 3,
     ingredients: [
-      { name: "Egg whites", effect: "Protein with no cholesterol" },
-      { name: "Apple slices", effect: "Soluble fiber lowers LDL" },
+      { name: "Plain oatmeal", effect: "Beta-glucan fiber actively lowers LDL" },
+      { name: "Skip toppings pack", effect: "Avoids added sugar that raises triglycerides" },
+      { name: "Side salad", effect: "Greens deliver folate and potassium" },
+      { name: "Low-fat dressing", effect: "Cuts saturated fat from the meal" },
     ],
   },
   {
     id: "ff5",
     restaurant: "Taco Bell",
-    initials: "T",
-    brandColor: "bg-[hsl(280_60%_45%)]",
-    meal: "Power Menu Bowl — Veggie",
+    logo: "https://upload.wikimedia.org/wikipedia/en/b/b7/Taco_Bell_2023.svg",
+    meal: "Black Beans & Rice + Fresco-style Chicken Soft Taco",
     image: ffBeanBowl,
-    hearts: 4,
+    hearts: 3,
     ingredients: [
       { name: "Black beans", effect: "Plant protein and fiber lower BP" },
-      { name: "Brown rice + pico", effect: "Whole grains and lycopene" },
-    ],
-  },
-  {
-    id: "ff6",
-    restaurant: "Sonic",
-    initials: "S",
-    brandColor: "bg-[hsl(220_70%_40%)]",
-    meal: "Apple Slices Side",
-    image: ffAppleSlices,
-    hearts: 3,
-    ingredients: [
-      { name: "Fresh apple", effect: "Pectin fiber lowers cholesterol" },
-    ],
-  },
-  {
-    id: "ff7",
-    restaurant: "McDonald's",
-    initials: "M",
-    brandColor: "bg-[hsl(35_95%_50%)]",
-    meal: "Fruit & Yogurt Parfait",
-    image: ffParfait,
-    hearts: 3,
-    ingredients: [
-      { name: "Low-fat yogurt", effect: "Calcium + probiotics support BP" },
-      { name: "Berries", effect: "Anthocyanins protect arteries" },
+      { name: "Rice", effect: "Carbs for energy without fryer oils" },
+      { name: "Fresco-style", effect: "Swaps cheese/sauce for pico — less saturated fat" },
+      { name: "Grilled chicken", effect: "Lean protein, no frying oils" },
     ],
   },
 ];
