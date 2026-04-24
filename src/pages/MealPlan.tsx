@@ -381,10 +381,11 @@ const MealPlan = () => {
                       <div className="aspect-[4/3] overflow-hidden bg-muted">
                         <img src={m.image} alt={m.name} loading="lazy" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
                       </div>
-                      <div className="p-3">
-                        <p className="font-medium text-sm leading-snug">{m.name}</p>
-                        <p className="text-xs text-muted-foreground mt-1">${m.cost.toFixed(2)}/serving</p>
-                      </div>
+                       <div className="p-3">
+                         <p className="font-medium text-sm leading-snug">{m.name}</p>
+                         <p className="text-xs text-muted-foreground mt-1 leading-snug line-clamp-2">{m.description}</p>
+                         <p className="text-xs text-primary font-semibold mt-1">~${m.total.toFixed(2)}/serving</p>
+                       </div>
                     </button>
                   ))}
                 </div>
@@ -399,7 +400,7 @@ const MealPlan = () => {
           className="fixed inset-0 z-50 bg-foreground/60 backdrop-blur-sm flex items-center justify-center p-4 animate-fade-in-up"
           onClick={() => setOpen(null)}
         >
-          <div className="relative max-w-3xl w-full" onClick={(e) => e.stopPropagation()}>
+          <div className="relative max-w-3xl w-full max-h-[90vh] overflow-y-auto" onClick={(e) => e.stopPropagation()}>
             <button
               onClick={() => setOpen(null)}
               className="absolute -top-3 -right-3 z-10 w-10 h-10 rounded-full bg-card shadow-card flex items-center justify-center hover:bg-muted"
@@ -407,7 +408,41 @@ const MealPlan = () => {
             >
               <X className="w-5 h-5" />
             </button>
-            <RecipeDetailCard meal={open} />
+            <article className="rounded-2xl bg-card border border-border/60 shadow-card overflow-hidden">
+              <div className="aspect-[16/9] overflow-hidden bg-muted">
+                <img src={open.image} alt={open.name} className="w-full h-full object-cover" />
+              </div>
+              <div className="p-6">
+                <h3 className="font-display text-2xl font-semibold mb-4">{open.name}</h3>
+                <div className="text-xs uppercase tracking-wider text-secondary font-semibold mb-2">Core Ingredients</div>
+                <ul className="space-y-1.5 mb-4">
+                  {open.ingredients.map((i) => (
+                    <li key={i.name} className="text-sm flex justify-between gap-3">
+                      <span className="font-medium">{i.name}</span>
+                      <span className="text-muted-foreground tabular-nums">${i.price.toFixed(2)}</span>
+                    </li>
+                  ))}
+                </ul>
+                <div className="flex items-center justify-between border-t border-border/60 pt-3 mb-5">
+                  <span className="text-sm font-semibold">Total estimated cost</span>
+                  <span className="font-display text-lg font-semibold text-primary">~${open.total.toFixed(2)}</span>
+                </div>
+                <a
+                  href={walmartUrl(open.searchTerm)}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-2 h-11 px-5 rounded-full bg-primary text-primary-foreground font-semibold shadow-soft hover:shadow-glow transition-shadow mb-5"
+                >
+                  <ShoppingCart className="w-4 h-4" /> Shop at Walmart <ExternalLink className="w-3.5 h-3.5" />
+                </a>
+                <div className="text-xs uppercase tracking-wider text-secondary font-semibold mb-2">Instructions</div>
+                <ol className="space-y-2 list-decimal list-inside text-sm">
+                  {open.instructions.map((step, i) => (
+                    <li key={i} className="leading-relaxed">{step}</li>
+                  ))}
+                </ol>
+              </div>
+            </article>
           </div>
         </div>
       )}
