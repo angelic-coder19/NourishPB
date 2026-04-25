@@ -3,6 +3,13 @@ import { Copy, Scissors, Check } from "lucide-react";
 import Modal from "./Modal";
 import { toast } from "@/hooks/use-toast";
 
+const STORE_LOGOS: Record<string, string> = {
+  Walmart: "https://upload.wikimedia.org/wikipedia/commons/thumb/6/60/Walmart_spark_%282025%29.svg/1280px-Walmart_spark_%282025%29.svg.png",
+  "Super 1 Foods": "https://play-lh.googleusercontent.com/YYyjR89xq7G2nqY95VTCJAvaNowo7dLADj9RBotMcrEYnyXGTV4DngQrngSYQV2y4Q",
+  FoodSmart: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQPUan69as9EbVcdnilcpSeiA5ErvaIx5_Lag&s",
+  Walgreens: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRqBfQX1bNXXVK-2w_xOvC0QNpxdoDYxGfBYQ&s",
+};
+
 type Coupon = {
   id: string;
   store: string;
@@ -59,9 +66,16 @@ const Coupons = () => {
             style={{ border: "2px dashed hsl(var(--primary) / 0.4)" }}
           >
             <div className="flex items-start justify-between gap-3 mb-3">
-              <div>
-                <p className="text-xs uppercase tracking-wider text-muted-foreground font-semibold">{c.store}</p>
-                <p className="font-display text-lg font-semibold leading-tight mt-1">{c.product}</p>
+              <div className="flex items-start gap-2.5 min-w-0">
+                {STORE_LOGOS[c.store] && (
+                  <div className="w-10 h-10 rounded-lg bg-white border border-border/60 flex items-center justify-center p-1 shrink-0">
+                    <img src={STORE_LOGOS[c.store]} alt={`${c.store} logo`} loading="lazy" className="max-w-full max-h-full object-contain" />
+                  </div>
+                )}
+                <div className="min-w-0">
+                  <p className="text-xs uppercase tracking-wider text-muted-foreground font-semibold">{c.store}</p>
+                  <p className="font-display text-lg font-semibold leading-tight mt-1">{c.product}</p>
+                </div>
               </div>
               <Scissors className="w-5 h-5 text-primary/60 shrink-0" />
             </div>
