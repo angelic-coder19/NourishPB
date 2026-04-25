@@ -1,8 +1,13 @@
 import { Meal } from "@/data/content";
 import { ChefHat, DollarSign, Sparkles } from "lucide-react";
+import { detectAllergens, isLocalIngredient, recipeHasLocal } from "@/lib/allergens";
+import AllergenInfo from "./AllergenInfo";
+import { LocalBadge, LocalFooterNote } from "./LocalBadge";
 
 const RecipeDetailCard = ({ meal }: { meal: Meal }) => {
   const total = meal.ingredients.reduce((s, i) => s + (i.price ?? 0), 0);
+  const allergens = detectAllergens(meal.ingredients);
+  const hasLocal = recipeHasLocal(meal.ingredients);
   return (
     <article className="rounded-2xl bg-card overflow-hidden shadow-card border border-border/60 animate-scale-in">
       <div className="grid md:grid-cols-2 gap-0">
@@ -27,6 +32,7 @@ const RecipeDetailCard = ({ meal }: { meal: Meal }) => {
                 <li key={ing.name} className="text-sm flex items-start justify-between gap-3">
                   <div>
                     <span className="font-medium">{ing.name}</span>
+                    {isLocalIngredient(ing.name) && <LocalBadge />}
                     <span className="text-muted-foreground"> — {ing.effect}</span>
                   </div>
                   {ing.price !== undefined && (
@@ -47,6 +53,8 @@ const RecipeDetailCard = ({ meal }: { meal: Meal }) => {
               {meal.instructions.map((s) => <li key={s}>{s}</li>)}
             </ol>
           </div>
+          <AllergenInfo allergens={allergens} />
+          {hasLocal && <LocalFooterNote />}
         </div>
       </div>
     </article>
