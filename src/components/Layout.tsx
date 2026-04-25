@@ -1,8 +1,9 @@
 import { NavLink, Outlet } from "react-router-dom";
-import { Heart, Menu, X } from "lucide-react";
+import { Menu, X } from "lucide-react";
 import { useState } from "react";
 import { cn } from "@/lib/utils";
 import StatBanner from "@/components/StatBanner";
+import logoEureka from "@/assets/logo-eureka.png";
 
 const navItems = [
   { to: "/", label: "Home" },
@@ -19,8 +20,8 @@ const Layout = () => {
       <header className="sticky top-0 z-40 backdrop-blur-md bg-background/80 border-b border-border/60">
         <div className="container flex items-center justify-between h-16">
           <NavLink to="/" className="flex items-center gap-2 group">
-            <span className="relative inline-flex items-center justify-center w-9 h-9 rounded-full bg-gradient-hero shadow-glow">
-              <Heart className="w-5 h-5 text-primary-foreground fill-primary-foreground" />
+            <span className="relative inline-flex items-center justify-center w-10 h-10">
+              <img src={logoEureka} alt="Project Eureka" className="w-full h-full object-contain" />
             </span>
             <span className="font-display font-semibold text-lg leading-none">
               Project Eureka
