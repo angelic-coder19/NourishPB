@@ -1,13 +1,13 @@
 import { useState } from "react";
-import { LeafyGreen, MapPin, Phone, Mail, Fish, HandHeart } from "lucide-react";
+import { MapPin, Phone, Mail, Fish, HeartHandshake } from "lucide-react";
 import Modal from "./Modal";
 import CategoryTag from "./CategoryTag";
 
-const UAPB_LOGO =
-  "https://tse1.mm.bing.net/th/id/OIP.e1wX5fwPM6sq6FBayJ6KAAAAA?rs=1&pid=ImgDetMain&o=7&rm=3";
+const UAPB_SCHOOL_LOGO =
+  "https://yt3.googleusercontent.com/ytc/AIdro_kcKQIGxm-eeOJwJHYqLzKq4fYGIB4sdreWT728qe3cjA=s900-c-k-c0x00ffffff-no-rj";
 
-const FOOD_BANK_LOGO =
-  "https://cdn-icons-png.flaticon.com/512/1046/1046784.png";
+const UAPB_LONOKE_LOGO =
+  "https://yt3.googleusercontent.com/_ld56qLHNlFr-sjM0EuAyZioyROEjzmYcElxbFfZXH37FBk1Few_AZ1rvm_GhGUUJASp7dWO6Q=s900-c-k-c0x00ffffff-no-rj";
 
 const TILAPIA_IMG =
   "https://images.unsplash.com/photo-1559717865-a99cac1c95d8?auto=format&fit=crop&w=400&q=70";
@@ -37,6 +37,9 @@ const Tile = ({
 }) => {
   const inner = (
     <>
+      <span className="absolute top-2 left-2 z-10">
+        <CategoryTag category={category} />
+      </span>
       <div className={`w-20 h-20 rounded-2xl ${logoBg} flex items-center justify-center shadow-soft p-3`}>
         {logo ? (
           <img src={logo} alt={`${name} logo`} loading="lazy" className="max-w-full max-h-full object-contain" />
@@ -49,15 +52,12 @@ const Tile = ({
         <p className="text-xs text-muted-foreground inline-flex items-center gap-1 mt-1">
           <MapPin className="w-3 h-3" /> {subtitle}
         </p>
-        <span className="mt-2 inline-block">
-          <CategoryTag category={category} />
-        </span>
         <p className="text-xs text-muted-foreground mt-2 leading-snug">{tip}</p>
       </div>
     </>
   );
   const cls =
-    "group rounded-2xl bg-white/95 hover:bg-white border border-white/40 p-5 flex flex-col items-center gap-3 text-center transition-all hover:-translate-y-1 shadow-soft hover:shadow-card";
+    "group relative rounded-2xl bg-white/95 hover:bg-white border border-white/40 p-5 pt-9 flex flex-col items-center gap-3 text-center transition-all hover:-translate-y-1 shadow-soft hover:shadow-card";
   if (href) {
     return (
       <a href={href} target="_blank" rel="noopener noreferrer" className={cls}>
@@ -130,7 +130,7 @@ export const UapbAndFoodBank = () => {
   return (
     <>
       <Tile
-        logo={UAPB_LOGO}
+        logo={UAPB_SCHOOL_LOGO}
         name="UAPB School of Agriculture"
         subtitle="Pine Bluff, AR"
         category="UAPB"
@@ -138,7 +138,7 @@ export const UapbAndFoodBank = () => {
         onClick={() => setOpen("school")}
       />
       <Tile
-        logo={UAPB_LOGO}
+        logo={UAPB_LONOKE_LOGO}
         name="UAPB Lonoke Ag Center"
         subtitle="Lonoke, AR"
         category="UAPB"
@@ -146,7 +146,8 @@ export const UapbAndFoodBank = () => {
         onClick={() => setOpen("lonoke")}
       />
       <Tile
-        logo={FOOD_BANK_LOGO}
+        logoIcon={<HeartHandshake className="w-12 h-12 text-primary" />}
+        logoBg="bg-primary/10"
         name="Pine Bluff Food Bank"
         subtitle="Multiple locations"
         category="Food Bank"
