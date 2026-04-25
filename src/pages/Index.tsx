@@ -6,6 +6,9 @@ import MealCard from "@/components/MealCard";
 import HerbCard from "@/components/HerbCard";
 import LocalFarms from "@/components/LocalFarms";
 import Coupons from "@/components/Coupons";
+import UapbAndFoodBank from "@/components/UapbAndFoodBank";
+import CategoryTag from "@/components/CategoryTag";
+import HomeTour from "@/components/HomeTour";
 
 const Section = ({
   eyebrow,
@@ -13,14 +16,16 @@ const Section = ({
   subtitle,
   children,
   id,
+  tourId,
 }: {
   eyebrow: string;
   title: string;
   subtitle?: string;
   children: React.ReactNode;
   id?: string;
+  tourId?: string;
 }) => (
-  <section id={id} className="container py-16 md:py-20">
+  <section id={id} data-tour={tourId} className="container py-16 md:py-20">
     <div className="max-w-2xl mb-10">
       <p className="text-xs uppercase tracking-[0.2em] text-primary font-semibold mb-2">{eyebrow}</p>
       <h2 className="font-display text-3xl md:text-4xl font-semibold mb-2">{title}</h2>
@@ -33,8 +38,9 @@ const Section = ({
 const Index = () => {
   return (
     <>
+      <HomeTour />
       {/* HERO */}
-      <section className="relative overflow-hidden">
+      <section className="relative overflow-hidden" data-tour="hero">
         <div className="absolute inset-0">
           <img src={heroImg} alt="Heart-healthy foods" width={1600} height={1024} className="w-full h-full object-cover" />
           <div className="absolute inset-0 bg-gradient-hero" />
@@ -74,13 +80,14 @@ const Index = () => {
         eyebrow="Healthy Meals"
         title="Meals that love your heart back"
         subtitle="Each meal is built around ingredients clinically shown to lower cardiovascular risk."
+        tourId="meals"
       >
         <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
           {meals.map((m) => <MealCard key={m.id} meal={m} />)}
         </div>
       </Section>
 
-      <div className="bg-gradient-warm">
+      <div className="bg-gradient-warm" data-tour="herbs">
         <Section
           eyebrow="Healthy Herbs"
           title="Small spice, big protection"
@@ -96,6 +103,7 @@ const Index = () => {
         eyebrow="Healthy Fruits"
         title="Nature's heart medicine"
         subtitle="Whole fruits deliver fiber, antioxidants, and potassium your arteries crave."
+        tourId="fruits"
       >
         <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
           {fruits.map((f) => <HerbCard key={f.id} item={f} />)}
@@ -104,6 +112,7 @@ const Index = () => {
 
       <div
         className="relative bg-cover bg-center"
+        data-tour="shop"
         style={{
           backgroundImage:
             "linear-gradient(to bottom, hsl(var(--success) / 0.85), hsl(var(--success) / 0.75)), url('https://www.salon.com/app/uploads/2021/08/farmers-market-produce-0812211.jpg')",
@@ -136,16 +145,24 @@ const Index = () => {
                   <p className="text-xs text-muted-foreground inline-flex items-center gap-1 mt-1">
                     <MapPin className="w-3 h-3" /> Pine Bluff, AR
                   </p>
+                  {store.category && (
+                    <span className="mt-2 inline-block">
+                      <CategoryTag category={store.category} />
+                    </span>
+                  )}
                   <p className="text-xs text-muted-foreground mt-2 leading-snug">{store.tip}</p>
                 </div>
               </a>
             ))}
             <LocalFarms />
+            <UapbAndFoodBank />
           </div>
         </section>
       </div>
 
-      <Coupons />
+      <div data-tour="coupons">
+        <Coupons />
+      </div>
     </>
   );
 };
