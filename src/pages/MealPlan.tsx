@@ -519,7 +519,8 @@ const MealPlan = () => {
                       return (
                         <div
                           key={`${row.type}-${i}-empty`}
-                          className="rounded-2xl border border-dashed border-amber-400 bg-amber-50 text-amber-800 p-3 text-xs flex items-start gap-2"
+                          className="rounded-2xl border border-dashed p-3 text-xs flex items-start gap-2"
+                          style={{ backgroundColor: "#FEF3C7", color: "#92400E", borderColor: "#FCD34D" }}
                         >
                           <AlertTriangle className="w-4 h-4 shrink-0 mt-0.5" />
                           <span>No allergen-safe meals available for this slot — please adjust your filters.</span>
