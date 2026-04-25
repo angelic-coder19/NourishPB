@@ -140,7 +140,7 @@ const Index = () => {
             </p>
           </div>
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-10 gap-4 [&>*]:lg:col-span-2 lg:[&>*:nth-child(6)]:col-start-2">
-            {stores.map((store, idx) => (
+            {stores.map((store) => (
               <a
                 key={store.name}
                 href={store.url}
