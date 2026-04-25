@@ -220,6 +220,7 @@ export type Store = {
   url: string;
   logo: string;
   tip: string;
+  category?: "Supermarket" | "Local Farm" | "UAPB" | "Food Bank";
 };
 
 export const stores: Store[] = [
@@ -228,24 +229,28 @@ export const stores: Store[] = [
     url: "https://www.walmart.com",
     logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/6/60/Walmart_spark_%282025%29.svg/1280px-Walmart_spark_%282025%29.svg.png",
     tip: "Best for full ingredient selection & pickup/delivery",
+    category: "Supermarket",
   },
   {
     name: "Super 1 Foods",
     url: "https://www.instacart.com/store/super-1-foods/storefront",
     logo: "https://play-lh.googleusercontent.com/YYyjR89xq7G2nqY95VTCJAvaNowo7dLADj9RBotMcrEYnyXGTV4DngQrngSYQV2y4Q",
     tip: "Best for fresh produce & Southern staples",
+    category: "Supermarket",
   },
   {
     name: "FoodSmart",
     url: "https://www.foodsmart.com",
     logo: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQPUan69as9EbVcdnilcpSeiA5ErvaIx5_Lag&s",
     tip: "Best for budget-friendly healthy options",
+    category: "Supermarket",
   },
   {
     name: "Walgreens",
     url: "https://www.walgreens.com",
     logo: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRqBfQX1bNXXVK-2w_xOvC0QNpxdoDYxGfBYQ&s",
     tip: "Best for vitamins, supplements & heart-health items",
+    category: "Supermarket",
   },
 ];
 
