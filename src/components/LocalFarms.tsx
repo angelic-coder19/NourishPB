@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { LeafyGreen, MapPin, Phone, Mail, Sprout, Tractor } from "lucide-react";
 import Modal from "./Modal";
+import CategoryTag from "./CategoryTag";
 
 type Produce = { name: string; effect: string };
 
@@ -83,10 +84,10 @@ const FarmCard = ({
     <div>
       <p className="font-semibold text-sm text-foreground">{name}</p>
       <p className="text-xs text-muted-foreground inline-flex items-center gap-1 mt-1">
-        Local Farm · Pine Bluff, AR
+        <MapPin className="w-3 h-3" /> Pine Bluff, AR
       </p>
-      <span className="inline-flex items-center gap-1 mt-2 px-2 py-0.5 rounded-full bg-success/15 text-success text-[10px] font-semibold">
-        Locally Grown 🌱
+      <span className="mt-2 inline-block">
+        <CategoryTag category="Local Farm" />
       </span>
       <p className="text-xs text-muted-foreground mt-2 leading-snug">{tip}</p>
     </div>
