@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Leaf, Sprout, Tractor } from "lucide-react";
+import { LeafyGreen, MapPin, Phone, Mail, Sprout, Tractor } from "lucide-react";
 import Modal from "./Modal";
 
 type Produce = { name: string; effect: string };
@@ -26,7 +26,7 @@ const ProduceList = ({ items }: { items: Produce[] }) => (
   <ul className="space-y-2.5">
     {items.map((p) => (
       <li key={p.name} className="flex items-start gap-2.5 text-sm">
-        <Leaf className="w-4 h-4 mt-0.5 text-success shrink-0" />
+        <LeafyGreen className="w-4 h-4 mt-0.5 text-success shrink-0" />
         <span>
           <span className="font-semibold text-foreground">{p.name}</span>
           <span className="text-muted-foreground"> — {p.effect}</span>
@@ -34,6 +34,31 @@ const ProduceList = ({ items }: { items: Produce[] }) => (
       </li>
     ))}
   </ul>
+);
+
+const FarmContact = ({
+  address,
+  phone,
+  email,
+}: {
+  address: string;
+  phone: string;
+  email: string;
+}) => (
+  <div className="mt-5 pt-4 border-t border-border/60 space-y-2 text-sm">
+    <div className="flex items-start gap-2 text-foreground">
+      <MapPin className="w-4 h-4 mt-0.5 text-success shrink-0" />
+      <span>{address}</span>
+    </div>
+    <div className="flex items-center gap-2 text-muted-foreground">
+      <Phone className="w-4 h-4 text-success shrink-0" />
+      <a href={`tel:${phone.replace(/[^+\d]/g, "")}`} className="hover:text-foreground">{phone}</a>
+    </div>
+    <div className="flex items-center gap-2 text-muted-foreground">
+      <Mail className="w-4 h-4 text-success shrink-0" />
+      <a href={`mailto:${email}`} className="hover:text-foreground">{email}</a>
+    </div>
+  </div>
 );
 
 const FarmCard = ({
@@ -87,16 +112,28 @@ export const LocalFarms = () => {
       <Modal
         open={open === "lillys"}
         onClose={() => setOpen(null)}
-        title="Available at Lilly's Garden"
+        title="Lilly's Garden"
       >
+        <p className="text-xs uppercase tracking-wider text-success font-semibold mb-3">In Stock</p>
         <ProduceList items={lillys} />
+        <FarmContact
+          address="23 Hazel Street, Pine Bluff, AR"
+          phone="(870) 555-0142"
+          email="hello@lillysgarden.com"
+        />
       </Modal>
       <Modal
         open={open === "joe"}
         onClose={() => setOpen(null)}
-        title="Available at Farmer Joe's Greens"
+        title="Farmer Joe's Greens"
       >
+        <p className="text-xs uppercase tracking-wider text-success font-semibold mb-3">In Stock</p>
         <ProduceList items={farmerJoes} />
+        <FarmContact
+          address="2000 N University Drive, Pine Bluff, AR"
+          phone="(870) 555-0317"
+          email="contact@farmerjoesgreens.com"
+        />
       </Modal>
     </>
   );

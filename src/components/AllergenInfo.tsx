@@ -1,15 +1,8 @@
-import { AlertTriangle, Check } from "lucide-react";
+import { AlertTriangle } from "lucide-react";
 import { Allergen } from "@/lib/allergens";
 
 const AllergenInfo = ({ allergens }: { allergens: Allergen[] }) => {
-  if (allergens.length === 0) {
-    return (
-      <div className="mt-3 inline-flex items-center gap-1.5 text-xs font-medium text-success">
-        <Check className="w-3.5 h-3.5" />
-        No major allergens detected
-      </div>
-    );
-  }
+  if (allergens.length === 0) return null;
   return (
     <div
       className="mt-3 flex items-start gap-2 rounded-lg px-3 py-2 text-xs font-medium"
