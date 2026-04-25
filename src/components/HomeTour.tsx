@@ -21,6 +21,12 @@ const STEPS: Step[] = [
       "These are full meals built around foods that are good for your heart. Each one shows the ingredients and how they help.",
   },
   {
+    selector: '[data-tour="killer-meals"]',
+    title: "Meals to Watch",
+    body:
+      "These are popular Pine Bluff dishes with 'killer ingredients' — foods that, eaten often, quietly raise your risk of heart disease. Knowing them helps you choose healthier swaps.",
+  },
+  {
     selector: '[data-tour="herbs"]',
     title: "Healthy Herbs",
     body:
