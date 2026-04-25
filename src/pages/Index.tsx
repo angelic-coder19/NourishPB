@@ -128,14 +128,14 @@ const Index = () => {
               Local stores and farms stocking the ingredients you need to start eating heart-smart today.
             </p>
           </div>
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4 [&>*:nth-child(n+6)]:lg:col-span-1 lg:[&>*:nth-child(6)]:col-start-2">
-            {stores.map((store) => (
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-10 gap-4">
+            {stores.map((store, idx) => (
               <a
                 key={store.name}
                 href={store.url}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="group relative rounded-2xl bg-white/95 hover:bg-white border border-white/40 p-5 pt-9 flex flex-col items-center gap-3 text-center transition-all hover:-translate-y-1 shadow-soft hover:shadow-card"
+                className="group relative lg:col-span-2 rounded-2xl bg-white/95 hover:bg-white border border-white/40 p-5 pt-9 flex flex-col items-center gap-3 text-center transition-all hover:-translate-y-1 shadow-soft hover:shadow-card"
               >
                 {store.category && (
                   <span className="absolute top-2 left-2 z-10">
