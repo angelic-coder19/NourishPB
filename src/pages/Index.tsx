@@ -128,15 +128,20 @@ const Index = () => {
               Local stores and farms stocking the ingredients you need to start eating heart-smart today.
             </p>
           </div>
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4 [&>*:nth-child(n+6)]:lg:col-span-1 lg:[&>*:nth-child(6)]:col-start-2">
             {stores.map((store) => (
               <a
                 key={store.name}
                 href={store.url}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="group rounded-2xl bg-white/95 hover:bg-white border border-white/40 p-5 flex flex-col items-center gap-3 text-center transition-all hover:-translate-y-1 shadow-soft hover:shadow-card"
+                className="group relative rounded-2xl bg-white/95 hover:bg-white border border-white/40 p-5 pt-9 flex flex-col items-center gap-3 text-center transition-all hover:-translate-y-1 shadow-soft hover:shadow-card"
               >
+                {store.category && (
+                  <span className="absolute top-2 left-2 z-10">
+                    <CategoryTag category={store.category} />
+                  </span>
+                )}
                 <div className="w-20 h-20 rounded-2xl bg-white flex items-center justify-center shadow-soft p-3">
                   <img src={store.logo} alt={`${store.name} logo`} loading="lazy" className="max-w-full max-h-full object-contain" />
                 </div>
@@ -145,11 +150,6 @@ const Index = () => {
                   <p className="text-xs text-muted-foreground inline-flex items-center gap-1 mt-1">
                     <MapPin className="w-3 h-3" /> Pine Bluff, AR
                   </p>
-                  {store.category && (
-                    <span className="mt-2 inline-block">
-                      <CategoryTag category={store.category} />
-                    </span>
-                  )}
                   <p className="text-xs text-muted-foreground mt-2 leading-snug">{store.tip}</p>
                 </div>
               </a>
