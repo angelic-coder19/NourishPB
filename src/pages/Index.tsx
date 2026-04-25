@@ -9,6 +9,7 @@ import Coupons from "@/components/Coupons";
 import UapbAndFoodBank from "@/components/UapbAndFoodBank";
 import CategoryTag from "@/components/CategoryTag";
 import HomeTour from "@/components/HomeTour";
+import KillerMeals from "@/components/KillerMeals";
 
 const Section = ({
   eyebrow,
@@ -86,6 +87,16 @@ const Index = () => {
           {meals.map((m) => <MealCard key={m.id} meal={m} />)}
         </div>
       </Section>
+
+      <div className="bg-destructive/5" data-tour="killer-meals">
+        <Section
+          eyebrow="Heart Risks"
+          title="Common Pine Bluff meals to watch"
+          subtitle="These local favorites are loved for a reason — but eaten often, their ingredients quietly raise heart disease risk."
+        >
+          <KillerMeals />
+        </Section>
+      </div>
 
       <div className="bg-gradient-warm" data-tour="herbs">
         <Section
