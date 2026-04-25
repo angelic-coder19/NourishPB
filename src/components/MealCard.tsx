@@ -1,10 +1,15 @@
 import { Meal } from "@/data/content";
 import { Sparkles, ShoppingCart, ExternalLink } from "lucide-react";
+import { detectAllergens, isLocalIngredient, recipeHasLocal } from "@/lib/allergens";
+import AllergenInfo from "./AllergenInfo";
+import { LocalBadge, LocalFooterNote } from "./LocalBadge";
 
 const walmartUrl = (q: string) => `https://www.walmart.com/search?q=${encodeURIComponent(q)}`;
 const shortName = (name: string) => name.split(/[(,]/)[0].trim();
 
 const MealCard = ({ meal }: { meal: Meal }) => {
+  const allergens = detectAllergens(meal.ingredients);
+  const hasLocal = recipeHasLocal(meal.ingredients);
   return (
     <article className="group rounded-2xl bg-card overflow-hidden shadow-soft hover:shadow-card transition-all duration-300 hover:-translate-y-1 border border-border/60">
       <div className="aspect-[4/3] overflow-hidden bg-muted">
@@ -25,6 +30,7 @@ const MealCard = ({ meal }: { meal: Meal }) => {
           {meal.ingredients.map((ing) => (
             <li key={ing.name} className="text-sm">
               <span className="font-medium text-foreground">{ing.name}</span>
+              {isLocalIngredient(ing.name) && <LocalBadge />}
               <span className="text-muted-foreground"> — {ing.effect}</span>
             </li>
           ))}
@@ -53,6 +59,8 @@ const MealCard = ({ meal }: { meal: Meal }) => {
             })}
           </div>
         </div>
+        <AllergenInfo allergens={allergens} />
+        {hasLocal && <LocalFooterNote />}
       </div>
     </article>
   );
