@@ -1,5 +1,5 @@
-import { useMemo, useRef, useState } from "react";
-import { Download, Sparkles, X, ShoppingCart, ExternalLink } from "lucide-react";
+import { useEffect, useMemo, useRef, useState } from "react";
+import { Download, Sparkles, X, ShoppingCart, ExternalLink, AlertTriangle } from "lucide-react";
 import jsPDF from "jspdf";
 import html2canvas from "html2canvas";
 import { toast } from "@/hooks/use-toast";
@@ -7,6 +7,9 @@ import mealOatmeal from "@/assets/meal-oatmeal.jpg";
 import mealLentil from "@/assets/meal-lentil.jpg";
 import mealSalmon from "@/assets/meal-salmon.jpg";
 import mealChickpea from "@/assets/meal-chickpea.jpg";
+import AllergenInfo from "@/components/AllergenInfo";
+import { LocalBadge, LocalFooterNote } from "@/components/LocalBadge";
+import { detectAllergens, isLocalIngredient, recipeHasLocal, Allergen } from "@/lib/allergens";
 
 type PlanMeal = {
   name: string;
@@ -223,24 +226,70 @@ const MealPlan = () => {
   const [mealTypes, setMealTypes] = useState<MealType[]>(["breakfast", "lunch", "dinner"]);
   const [generated, setGenerated] = useState(false);
   const [open, setOpen] = useState<PlanMeal | null>(null);
+  const [accountAllergies, setAccountAllergies] = useState(false);
+  const [allergyTags, setAllergyTags] = useState<string[]>([]);
+  const [allergyInput, setAllergyInput] = useState("");
+  const [errors, setErrors] = useState<{ meals?: string; budget?: string }>({});
   const tableRef = useRef<HTMLDivElement>(null);
+
+  // Group → People constraints
+  const peopleConfig: Record<Group, { min: number; max: number; def: number; helper: string; locked?: boolean }> = {
+    individual: { min: 1, max: 1, def: 1, helper: "Planning for yourself", locked: true },
+    family: { min: 2, max: 10, def: 4, helper: "Enter number of family members (2–10)" },
+    school: { min: 50, max: 500, def: 50, helper: "Minimum 50 students required" },
+    organization: { min: 10, max: 200, def: 10, helper: "Enter total number of members (10–200)" },
+  };
+  const pCfg = peopleConfig[group];
+
+  useEffect(() => {
+    setPeople(String(pCfg.def));
+  }, [group]); // eslint-disable-line react-hooks/exhaustive-deps
+
+  const QUICK_ALLERGENS = ["Gluten", "Dairy", "Eggs", "Fish", "Tree Nuts", "Peanuts", "Soy"];
+
+  const addAllergyTag = (raw: string) => {
+    const t = raw.trim();
+    if (!t) return;
+    setAllergyTags((prev) => (prev.some((x) => x.toLowerCase() === t.toLowerCase()) ? prev : [...prev, t]));
+    setAllergyInput("");
+  };
+
+  const removeAllergyTag = (t: string) =>
+    setAllergyTags((prev) => prev.filter((x) => x !== t));
+
+  const allergyTagsAsAllergens = useMemo<Allergen[]>(() => {
+    const valid: Allergen[] = ["Gluten", "Dairy", "Eggs", "Fish", "Shellfish", "Tree Nuts", "Peanuts", "Soy", "Sesame"];
+    return allergyTags
+      .map((t) => valid.find((v) => v.toLowerCase() === t.toLowerCase()))
+      .filter((x): x is Allergen => !!x);
+  }, [allergyTags]);
+
+  const isMealSafe = (m: PlanMeal): boolean => {
+    if (!accountAllergies || allergyTagsAsAllergens.length === 0) return true;
+    const detected = detectAllergens(m.ingredients);
+    return !detected.some((a) => allergyTagsAsAllergens.includes(a));
+  };
 
   const cols = period === "daily" ? 1 : 7;
   const colLabels = period === "daily" ? ["Today"] : days;
 
   const plan = useMemo(() => {
     if (!generated) return null;
-    const rows: { type: MealType; cells: PlanMeal[] }[] = mealTypes.map((t) => ({
-      type: t,
-      cells: Array.from({ length: cols }, (_, i) => pick(sources[t], i + (t === "lunch" ? 1 : t === "dinner" ? 2 : 0))),
-    }));
+    const rows: { type: MealType; cells: (PlanMeal | null)[] }[] = mealTypes.map((t) => {
+      const safePool = sources[t].filter(isMealSafe);
+      const offset = t === "lunch" ? 1 : t === "dinner" ? 2 : 0;
+      const cells = Array.from({ length: cols }, (_, i) =>
+        safePool.length === 0 ? null : safePool[(i + offset) % safePool.length]
+      );
+      return { type: t, cells };
+    });
     return rows;
-  }, [generated, mealTypes, cols]);
+  }, [generated, mealTypes, cols, accountAllergies, allergyTagsAsAllergens]);
 
   const totalCost = useMemo(() => {
     if (!plan) return 0;
     const ppl = parseInt(people) || 1;
-    const sum = plan.reduce((s, r) => s + r.cells.reduce((cs, m) => cs + m.total, 0), 0);
+    const sum = plan.reduce((s, r) => s + r.cells.reduce((cs, m) => cs + (m?.total ?? 0), 0), 0);
     return sum * ppl;
   }, [plan, people]);
 
@@ -250,10 +299,12 @@ const MealPlan = () => {
 
   const handleGenerate = (e: React.FormEvent) => {
     e.preventDefault();
-    if (mealTypes.length === 0) {
-      toast({ title: "Select at least one meal", description: "Pick breakfast, lunch, or dinner." });
-      return;
-    }
+    const next: { meals?: string; budget?: string } = {};
+    if (mealTypes.length === 0) next.meals = "Please select at least one meal type";
+    const b = parseFloat(budget);
+    if (!b || b <= 0) next.budget = "Budget must be greater than $0";
+    setErrors(next);
+    if (Object.keys(next).length > 0) return;
     setGenerated(true);
   };
 
