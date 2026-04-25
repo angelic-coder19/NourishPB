@@ -359,7 +359,16 @@ const MealPlan = () => {
             </div>
           </Field>
           <Field label="People">
-            <input type="number" min="1" value={people} onChange={(e) => setPeople(e.target.value)} className={inputCls} />
+            <input
+              type="number"
+              min={pCfg.min}
+              max={pCfg.max}
+              value={people}
+              disabled={pCfg.locked}
+              onChange={(e) => setPeople(e.target.value)}
+              className={inputCls + (pCfg.locked ? " opacity-60 cursor-not-allowed" : "")}
+            />
+            <span className="text-[11px] text-muted-foreground">{pCfg.helper}</span>
           </Field>
           <Field label="Period">
             <select value={period} onChange={(e) => setPeriod(e.target.value as Period)} className={inputCls}>
@@ -387,7 +396,90 @@ const MealPlan = () => {
                 );
               })}
             </div>
+            {errors.meals && <span className="text-xs text-destructive font-medium">{errors.meals}</span>}
           </Field>
+
+          {/* Allergy account section */}
+          <div className="lg:col-span-5 pt-2">
+            <label className="inline-flex items-center gap-2 cursor-pointer select-none">
+              <input
+                type="checkbox"
+                checked={accountAllergies}
+                onChange={(e) => setAccountAllergies(e.target.checked)}
+                className="w-4 h-4 accent-primary"
+              />
+              <span className="text-sm font-medium">Account for food allergies</span>
+            </label>
+            <div
+              className={`grid transition-all duration-300 ease-out ${
+                accountAllergies ? "grid-rows-[1fr] opacity-100 mt-3" : "grid-rows-[0fr] opacity-0"
+              }`}
+            >
+              <div className="overflow-hidden">
+                <div className="rounded-2xl border border-border/60 bg-muted/30 p-4 space-y-3">
+                  <div>
+                    <span className="text-xs uppercase tracking-wider font-semibold text-muted-foreground">
+                      List any allergies or dietary restrictions
+                    </span>
+                    <div className="mt-2 flex flex-wrap items-center gap-2 rounded-xl bg-background border border-input px-3 py-2 min-h-[48px]">
+                      {allergyTags.map((t) => (
+                        <span
+                          key={t}
+                          className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-primary/10 text-primary text-xs font-semibold"
+                        >
+                          {t}
+                          <button
+                            type="button"
+                            onClick={() => removeAllergyTag(t)}
+                            className="hover:text-destructive"
+                            aria-label={`Remove ${t}`}
+                          >
+                            <X className="w-3 h-3" />
+                          </button>
+                        </span>
+                      ))}
+                      <input
+                        type="text"
+                        value={allergyInput}
+                        onChange={(e) => setAllergyInput(e.target.value)}
+                        onKeyDown={(e) => {
+                          if (e.key === "Enter" || e.key === ",") {
+                            e.preventDefault();
+                            addAllergyTag(allergyInput);
+                          } else if (e.key === "Backspace" && !allergyInput && allergyTags.length) {
+                            removeAllergyTag(allergyTags[allergyTags.length - 1]);
+                          }
+                        }}
+                        placeholder="Type an allergen and press Enter (e.g. peanuts)"
+                        className="flex-1 min-w-[180px] bg-transparent outline-none text-sm"
+                      />
+                    </div>
+                  </div>
+                  <div className="flex flex-wrap gap-2">
+                    {QUICK_ALLERGENS.map((q) => (
+                      <button
+                        key={q}
+                        type="button"
+                        onClick={() => addAllergyTag(q)}
+                        className="px-3 h-7 rounded-full border border-input bg-background hover:bg-muted text-xs font-medium"
+                      >
+                        {q}
+                      </button>
+                    ))}
+                  </div>
+                  <p className="text-xs text-muted-foreground">
+                    We'll exclude meals containing these ingredients from your plan.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {errors.budget && (
+            <div className="lg:col-span-5 -mt-1">
+              <span className="text-xs text-destructive font-medium">{errors.budget}</span>
+            </div>
+          )}
 
           <div className="lg:col-span-5 flex flex-wrap items-center gap-3 pt-2">
             <button type="submit" className="h-11 px-6 rounded-full bg-primary text-primary-foreground font-semibold shadow-soft hover:shadow-glow transition-shadow inline-flex items-center gap-2">
@@ -422,23 +514,42 @@ const MealPlan = () => {
               {plan.map((row) => (
                 <div key={row.type} className="contents">
                   <div className="flex items-center font-display capitalize text-lg font-semibold pr-2">{row.type}</div>
-                  {row.cells.map((m, i) => (
-                    <button
-                      key={`${row.type}-${i}`}
-                      type="button"
-                      onClick={() => setOpen(m)}
-                      className="text-left rounded-2xl bg-card border border-border/60 shadow-soft hover:shadow-card hover:-translate-y-0.5 transition-all overflow-hidden group"
-                    >
-                      <div className="aspect-[4/3] overflow-hidden bg-muted">
-                        <img src={m.image} alt={m.name} loading="lazy" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
-                      </div>
-                       <div className="p-3">
-                         <p className="font-medium text-sm leading-snug">{m.name}</p>
-                         <p className="text-xs text-muted-foreground mt-1 leading-snug line-clamp-2">{m.description}</p>
-                         <p className="text-xs text-primary font-semibold mt-1">~${m.total.toFixed(2)}/serving</p>
-                       </div>
-                    </button>
-                  ))}
+                  {row.cells.map((m, i) => {
+                    if (!m) {
+                      return (
+                        <div
+                          key={`${row.type}-${i}-empty`}
+                          className="rounded-2xl border border-dashed border-amber-400 bg-amber-50 text-amber-800 p-3 text-xs flex items-start gap-2"
+                        >
+                          <AlertTriangle className="w-4 h-4 shrink-0 mt-0.5" />
+                          <span>No allergen-safe meals available for this slot — please adjust your filters.</span>
+                        </div>
+                      );
+                    }
+                    const detected = detectAllergens(m.ingredients);
+                    const local = recipeHasLocal(m.ingredients);
+                    return (
+                      <button
+                        key={`${row.type}-${i}`}
+                        type="button"
+                        onClick={() => setOpen(m)}
+                        className="text-left rounded-2xl bg-card border border-border/60 shadow-soft hover:shadow-card hover:-translate-y-0.5 transition-all overflow-hidden group"
+                      >
+                        <div className="aspect-[4/3] overflow-hidden bg-muted">
+                          <img src={m.image} alt={m.name} loading="lazy" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+                        </div>
+                        <div className="p-3">
+                          <p className="font-medium text-sm leading-snug">
+                            {m.name}
+                            {local && <LocalBadge />}
+                          </p>
+                          <p className="text-xs text-muted-foreground mt-1 leading-snug line-clamp-2">{m.description}</p>
+                          <p className="text-xs text-primary font-semibold mt-1">~${m.total.toFixed(2)}/serving</p>
+                          <AllergenInfo allergens={detected} />
+                        </div>
+                      </button>
+                    );
+                  })}
                 </div>
               ))}
             </div>
@@ -469,7 +580,10 @@ const MealPlan = () => {
                 <ul className="space-y-1.5 mb-4">
                   {open.ingredients.map((i) => (
                     <li key={i.name} className="text-sm flex justify-between gap-3">
-                      <span className="font-medium">{i.name}</span>
+                      <span className="font-medium">
+                        {i.name}
+                        {isLocalIngredient(i.name) && <LocalBadge />}
+                      </span>
                       <span className="text-muted-foreground tabular-nums">${i.price.toFixed(2)}</span>
                     </li>
                   ))}
@@ -492,6 +606,8 @@ const MealPlan = () => {
                     <li key={i} className="leading-relaxed">{step}</li>
                   ))}
                 </ol>
+                <AllergenInfo allergens={detectAllergens(open.ingredients)} />
+                {recipeHasLocal(open.ingredients) && <LocalFooterNote />}
               </div>
             </article>
           </div>
