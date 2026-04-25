@@ -4,6 +4,8 @@ import heroImg from "@/assets/hero-foods.jpg";
 import { meals, herbs, fruits, stores } from "@/data/content";
 import MealCard from "@/components/MealCard";
 import HerbCard from "@/components/HerbCard";
+import LocalFarms from "@/components/LocalFarms";
+import Coupons from "@/components/Coupons";
 
 const Section = ({
   eyebrow,
@@ -100,36 +102,50 @@ const Index = () => {
         </div>
       </Section>
 
-      <div className="bg-secondary text-secondary-foreground">
-        <Section
-          eyebrow="Where to Shop"
-          title="Find these foods in Pine Bluff"
-          subtitle="Local stores stocking the ingredients you need to start eating heart-smart today."
-        >
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+      <div
+        className="relative bg-cover bg-center"
+        style={{
+          backgroundImage:
+            "linear-gradient(to bottom, hsl(var(--success) / 0.85), hsl(var(--success) / 0.75)), url('https://www.salon.com/app/uploads/2021/08/farmers-market-produce-0812211.jpg')",
+        }}
+      >
+        <section id="shop" className="container py-16 md:py-20 text-white">
+          <div className="max-w-2xl mb-10">
+            <p className="text-xs uppercase tracking-[0.2em] text-white/90 font-semibold mb-2">Where to Shop</p>
+            <h2 className="font-display text-3xl md:text-4xl font-semibold mb-2 text-white drop-shadow">
+              Find these foods in Pine Bluff
+            </h2>
+            <p className="text-white/90 text-lg">
+              Local stores and farms stocking the ingredients you need to start eating heart-smart today.
+            </p>
+          </div>
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
             {stores.map((store) => (
               <a
                 key={store.name}
                 href={store.url}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="group rounded-2xl bg-secondary-foreground/5 hover:bg-secondary-foreground/10 border border-secondary-foreground/10 p-5 flex flex-col items-center gap-3 text-center transition-all hover:-translate-y-1"
+                className="group rounded-2xl bg-white/95 hover:bg-white border border-white/40 p-5 flex flex-col items-center gap-3 text-center transition-all hover:-translate-y-1 shadow-soft hover:shadow-card"
               >
                 <div className="w-20 h-20 rounded-2xl bg-white flex items-center justify-center shadow-soft p-3">
                   <img src={store.logo} alt={`${store.name} logo`} loading="lazy" className="max-w-full max-h-full object-contain" />
                 </div>
                 <div>
-                  <p className="font-semibold text-sm">{store.name}</p>
-                  <p className="text-xs text-secondary-foreground/70 inline-flex items-center gap-1 mt-1">
+                  <p className="font-semibold text-sm text-foreground">{store.name}</p>
+                  <p className="text-xs text-muted-foreground inline-flex items-center gap-1 mt-1">
                     <MapPin className="w-3 h-3" /> Pine Bluff, AR
                   </p>
-                  <p className="text-xs text-secondary-foreground/80 mt-2 leading-snug">{store.tip}</p>
+                  <p className="text-xs text-muted-foreground mt-2 leading-snug">{store.tip}</p>
                 </div>
               </a>
             ))}
+            <LocalFarms />
           </div>
-        </Section>
+        </section>
       </div>
+
+      <Coupons />
     </>
   );
 };

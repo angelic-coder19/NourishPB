@@ -304,7 +304,7 @@ export const fastFoodItems: FastFoodItem[] = [
   {
     id: "ff4",
     restaurant: "McDonald's",
-    logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/3/36/McDonald%27s_Golden_Arches.svg/1024px-McDonald%27s_Golden_Arches.svg.png",
+    logo: "https://logos-world.net/wp-content/uploads/2020/06/McDonalds-Logo-1982.png",
     meal: "Oatmeal (no toppings pack) + Side Salad with low-fat dressing",
     image: ffParfait,
     hearts: 3,

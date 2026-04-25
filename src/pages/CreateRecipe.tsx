@@ -6,6 +6,9 @@ import { toast } from "@/hooks/use-toast";
 import mealLentil from "@/assets/meal-lentil.jpg";
 import mealSalmon from "@/assets/meal-salmon.jpg";
 import mealChickpea from "@/assets/meal-chickpea.jpg";
+import AllergenInfo from "@/components/AllergenInfo";
+import { LocalBadge, LocalFooterNote } from "@/components/LocalBadge";
+import { detectAllergens, isLocalIngredient, recipeHasLocal } from "@/lib/allergens";
 
 type BudgetMeal = {
   name: string;
@@ -91,7 +94,10 @@ const pickBudgetMeal = (amount: number): BudgetMeal => {
 
 const walmartUrl = (q: string) => `https://www.walmart.com/search?q=${encodeURIComponent(q)}`;
 
-const BudgetMealCard = ({ meal }: { meal: BudgetMeal }) => (
+const BudgetMealCard = ({ meal }: { meal: BudgetMeal }) => {
+  const allergens = detectAllergens(meal.ingredients);
+  const hasLocal = recipeHasLocal(meal.ingredients);
+  return (
   <article className="rounded-2xl bg-card border border-border/60 shadow-card overflow-hidden animate-scale-in">
     <div className="aspect-[16/9] overflow-hidden bg-muted">
       <img src={meal.image} alt={meal.name} className="w-full h-full object-cover" />
@@ -102,7 +108,10 @@ const BudgetMealCard = ({ meal }: { meal: BudgetMeal }) => (
       <ul className="space-y-1.5 mb-4">
         {meal.ingredients.map((i) => (
           <li key={i.name} className="text-sm flex justify-between gap-3">
-            <span className="font-medium">{i.name}</span>
+            <span className="font-medium">
+              {i.name}
+              {isLocalIngredient(i.name) && <LocalBadge />}
+            </span>
             <span className="text-muted-foreground tabular-nums">${i.price.toFixed(2)}</span>
           </li>
         ))}
@@ -125,9 +134,12 @@ const BudgetMealCard = ({ meal }: { meal: BudgetMeal }) => (
           <li key={i} className="leading-relaxed">{step}</li>
         ))}
       </ol>
+      <AllergenInfo allergens={allergens} />
+      {hasLocal && <LocalFooterNote />}
     </div>
   </article>
 );
+};
 
 const PageHeader = ({ eyebrow, title, subtitle }: { eyebrow: string; title: string; subtitle: string }) => (
   <div className="container pt-12 md:pt-16 pb-6 max-w-3xl">

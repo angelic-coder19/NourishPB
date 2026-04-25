@@ -1,5 +1,5 @@
-import { useMemo, useRef, useState } from "react";
-import { Download, Sparkles, X, ShoppingCart, ExternalLink } from "lucide-react";
+import { useEffect, useMemo, useRef, useState } from "react";
+import { Download, Sparkles, X, ShoppingCart, ExternalLink, AlertTriangle } from "lucide-react";
 import jsPDF from "jspdf";
 import html2canvas from "html2canvas";
 import { toast } from "@/hooks/use-toast";
@@ -7,6 +7,9 @@ import mealOatmeal from "@/assets/meal-oatmeal.jpg";
 import mealLentil from "@/assets/meal-lentil.jpg";
 import mealSalmon from "@/assets/meal-salmon.jpg";
 import mealChickpea from "@/assets/meal-chickpea.jpg";
+import AllergenInfo from "@/components/AllergenInfo";
+import { LocalBadge, LocalFooterNote } from "@/components/LocalBadge";
+import { detectAllergens, isLocalIngredient, recipeHasLocal, Allergen } from "@/lib/allergens";
 
 type PlanMeal = {
   name: string;
@@ -223,24 +226,70 @@ const MealPlan = () => {
   const [mealTypes, setMealTypes] = useState<MealType[]>(["breakfast", "lunch", "dinner"]);
   const [generated, setGenerated] = useState(false);
   const [open, setOpen] = useState<PlanMeal | null>(null);
+  const [accountAllergies, setAccountAllergies] = useState(false);
+  const [allergyTags, setAllergyTags] = useState<string[]>([]);
+  const [allergyInput, setAllergyInput] = useState("");
+  const [errors, setErrors] = useState<{ meals?: string; budget?: string }>({});
   const tableRef = useRef<HTMLDivElement>(null);
+
+  // Group → People constraints
+  const peopleConfig: Record<Group, { min: number; max: number; def: number; helper: string; locked?: boolean }> = {
+    individual: { min: 1, max: 1, def: 1, helper: "Planning for yourself", locked: true },
+    family: { min: 2, max: 10, def: 4, helper: "Enter number of family members (2–10)" },
+    school: { min: 50, max: 500, def: 50, helper: "Minimum 50 students required" },
+    organization: { min: 10, max: 200, def: 10, helper: "Enter total number of members (10–200)" },
+  };
+  const pCfg = peopleConfig[group];
+
+  useEffect(() => {
+    setPeople(String(pCfg.def));
+  }, [group]); // eslint-disable-line react-hooks/exhaustive-deps
+
+  const QUICK_ALLERGENS = ["Gluten", "Dairy", "Eggs", "Fish", "Tree Nuts", "Peanuts", "Soy"];
+
+  const addAllergyTag = (raw: string) => {
+    const t = raw.trim();
+    if (!t) return;
+    setAllergyTags((prev) => (prev.some((x) => x.toLowerCase() === t.toLowerCase()) ? prev : [...prev, t]));
+    setAllergyInput("");
+  };
+
+  const removeAllergyTag = (t: string) =>
+    setAllergyTags((prev) => prev.filter((x) => x !== t));
+
+  const allergyTagsAsAllergens = useMemo<Allergen[]>(() => {
+    const valid: Allergen[] = ["Gluten", "Dairy", "Eggs", "Fish", "Shellfish", "Tree Nuts", "Peanuts", "Soy", "Sesame"];
+    return allergyTags
+      .map((t) => valid.find((v) => v.toLowerCase() === t.toLowerCase()))
+      .filter((x): x is Allergen => !!x);
+  }, [allergyTags]);
+
+  const isMealSafe = (m: PlanMeal): boolean => {
+    if (!accountAllergies || allergyTagsAsAllergens.length === 0) return true;
+    const detected = detectAllergens(m.ingredients);
+    return !detected.some((a) => allergyTagsAsAllergens.includes(a));
+  };
 
   const cols = period === "daily" ? 1 : 7;
   const colLabels = period === "daily" ? ["Today"] : days;
 
   const plan = useMemo(() => {
     if (!generated) return null;
-    const rows: { type: MealType; cells: PlanMeal[] }[] = mealTypes.map((t) => ({
-      type: t,
-      cells: Array.from({ length: cols }, (_, i) => pick(sources[t], i + (t === "lunch" ? 1 : t === "dinner" ? 2 : 0))),
-    }));
+    const rows: { type: MealType; cells: (PlanMeal | null)[] }[] = mealTypes.map((t) => {
+      const safePool = sources[t].filter(isMealSafe);
+      const offset = t === "lunch" ? 1 : t === "dinner" ? 2 : 0;
+      const cells = Array.from({ length: cols }, (_, i) =>
+        safePool.length === 0 ? null : safePool[(i + offset) % safePool.length]
+      );
+      return { type: t, cells };
+    });
     return rows;
-  }, [generated, mealTypes, cols]);
+  }, [generated, mealTypes, cols, accountAllergies, allergyTagsAsAllergens]);
 
   const totalCost = useMemo(() => {
     if (!plan) return 0;
     const ppl = parseInt(people) || 1;
-    const sum = plan.reduce((s, r) => s + r.cells.reduce((cs, m) => cs + m.total, 0), 0);
+    const sum = plan.reduce((s, r) => s + r.cells.reduce((cs, m) => cs + (m?.total ?? 0), 0), 0);
     return sum * ppl;
   }, [plan, people]);
 
@@ -250,10 +299,12 @@ const MealPlan = () => {
 
   const handleGenerate = (e: React.FormEvent) => {
     e.preventDefault();
-    if (mealTypes.length === 0) {
-      toast({ title: "Select at least one meal", description: "Pick breakfast, lunch, or dinner." });
-      return;
-    }
+    const next: { meals?: string; budget?: string } = {};
+    if (mealTypes.length === 0) next.meals = "Please select at least one meal type";
+    const b = parseFloat(budget);
+    if (!b || b <= 0) next.budget = "Budget must be greater than $0";
+    setErrors(next);
+    if (Object.keys(next).length > 0) return;
     setGenerated(true);
   };
 
@@ -308,7 +359,16 @@ const MealPlan = () => {
             </div>
           </Field>
           <Field label="People">
-            <input type="number" min="1" value={people} onChange={(e) => setPeople(e.target.value)} className={inputCls} />
+            <input
+              type="number"
+              min={pCfg.min}
+              max={pCfg.max}
+              value={people}
+              disabled={pCfg.locked}
+              onChange={(e) => setPeople(e.target.value)}
+              className={inputCls + (pCfg.locked ? " opacity-60 cursor-not-allowed" : "")}
+            />
+            <span className="text-[11px] text-muted-foreground">{pCfg.helper}</span>
           </Field>
           <Field label="Period">
             <select value={period} onChange={(e) => setPeriod(e.target.value as Period)} className={inputCls}>
@@ -336,7 +396,90 @@ const MealPlan = () => {
                 );
               })}
             </div>
+            {errors.meals && <span className="text-xs text-destructive font-medium">{errors.meals}</span>}
           </Field>
+
+          {/* Allergy account section */}
+          <div className="lg:col-span-5 pt-2">
+            <label className="inline-flex items-center gap-2 cursor-pointer select-none">
+              <input
+                type="checkbox"
+                checked={accountAllergies}
+                onChange={(e) => setAccountAllergies(e.target.checked)}
+                className="w-4 h-4 accent-primary"
+              />
+              <span className="text-sm font-medium">Account for food allergies</span>
+            </label>
+            <div
+              className={`grid transition-all duration-300 ease-out ${
+                accountAllergies ? "grid-rows-[1fr] opacity-100 mt-3" : "grid-rows-[0fr] opacity-0"
+              }`}
+            >
+              <div className="overflow-hidden">
+                <div className="rounded-2xl border border-border/60 bg-muted/30 p-4 space-y-3">
+                  <div>
+                    <span className="text-xs uppercase tracking-wider font-semibold text-muted-foreground">
+                      List any allergies or dietary restrictions
+                    </span>
+                    <div className="mt-2 flex flex-wrap items-center gap-2 rounded-xl bg-background border border-input px-3 py-2 min-h-[48px]">
+                      {allergyTags.map((t) => (
+                        <span
+                          key={t}
+                          className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-primary/10 text-primary text-xs font-semibold"
+                        >
+                          {t}
+                          <button
+                            type="button"
+                            onClick={() => removeAllergyTag(t)}
+                            className="hover:text-destructive"
+                            aria-label={`Remove ${t}`}
+                          >
+                            <X className="w-3 h-3" />
+                          </button>
+                        </span>
+                      ))}
+                      <input
+                        type="text"
+                        value={allergyInput}
+                        onChange={(e) => setAllergyInput(e.target.value)}
+                        onKeyDown={(e) => {
+                          if (e.key === "Enter" || e.key === ",") {
+                            e.preventDefault();
+                            addAllergyTag(allergyInput);
+                          } else if (e.key === "Backspace" && !allergyInput && allergyTags.length) {
+                            removeAllergyTag(allergyTags[allergyTags.length - 1]);
+                          }
+                        }}
+                        placeholder="Type an allergen and press Enter (e.g. peanuts)"
+                        className="flex-1 min-w-[180px] bg-transparent outline-none text-sm"
+                      />
+                    </div>
+                  </div>
+                  <div className="flex flex-wrap gap-2">
+                    {QUICK_ALLERGENS.map((q) => (
+                      <button
+                        key={q}
+                        type="button"
+                        onClick={() => addAllergyTag(q)}
+                        className="px-3 h-7 rounded-full border border-input bg-background hover:bg-muted text-xs font-medium"
+                      >
+                        {q}
+                      </button>
+                    ))}
+                  </div>
+                  <p className="text-xs text-muted-foreground">
+                    We'll exclude meals containing these ingredients from your plan.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {errors.budget && (
+            <div className="lg:col-span-5 -mt-1">
+              <span className="text-xs text-destructive font-medium">{errors.budget}</span>
+            </div>
+          )}
 
           <div className="lg:col-span-5 flex flex-wrap items-center gap-3 pt-2">
             <button type="submit" className="h-11 px-6 rounded-full bg-primary text-primary-foreground font-semibold shadow-soft hover:shadow-glow transition-shadow inline-flex items-center gap-2">
@@ -371,23 +514,43 @@ const MealPlan = () => {
               {plan.map((row) => (
                 <div key={row.type} className="contents">
                   <div className="flex items-center font-display capitalize text-lg font-semibold pr-2">{row.type}</div>
-                  {row.cells.map((m, i) => (
-                    <button
-                      key={`${row.type}-${i}`}
-                      type="button"
-                      onClick={() => setOpen(m)}
-                      className="text-left rounded-2xl bg-card border border-border/60 shadow-soft hover:shadow-card hover:-translate-y-0.5 transition-all overflow-hidden group"
-                    >
-                      <div className="aspect-[4/3] overflow-hidden bg-muted">
-                        <img src={m.image} alt={m.name} loading="lazy" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
-                      </div>
-                       <div className="p-3">
-                         <p className="font-medium text-sm leading-snug">{m.name}</p>
-                         <p className="text-xs text-muted-foreground mt-1 leading-snug line-clamp-2">{m.description}</p>
-                         <p className="text-xs text-primary font-semibold mt-1">~${m.total.toFixed(2)}/serving</p>
-                       </div>
-                    </button>
-                  ))}
+                  {row.cells.map((m, i) => {
+                    if (!m) {
+                      return (
+                        <div
+                          key={`${row.type}-${i}-empty`}
+                          className="rounded-2xl border border-dashed p-3 text-xs flex items-start gap-2"
+                          style={{ backgroundColor: "#FEF3C7", color: "#92400E", borderColor: "#FCD34D" }}
+                        >
+                          <AlertTriangle className="w-4 h-4 shrink-0 mt-0.5" />
+                          <span>No allergen-safe meals available for this slot — please adjust your filters.</span>
+                        </div>
+                      );
+                    }
+                    const detected = detectAllergens(m.ingredients);
+                    const local = recipeHasLocal(m.ingredients);
+                    return (
+                      <button
+                        key={`${row.type}-${i}`}
+                        type="button"
+                        onClick={() => setOpen(m)}
+                        className="text-left rounded-2xl bg-card border border-border/60 shadow-soft hover:shadow-card hover:-translate-y-0.5 transition-all overflow-hidden group"
+                      >
+                        <div className="aspect-[4/3] overflow-hidden bg-muted">
+                          <img src={m.image} alt={m.name} loading="lazy" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+                        </div>
+                        <div className="p-3">
+                          <p className="font-medium text-sm leading-snug">
+                            {m.name}
+                            {local && <LocalBadge />}
+                          </p>
+                          <p className="text-xs text-muted-foreground mt-1 leading-snug line-clamp-2">{m.description}</p>
+                          <p className="text-xs text-primary font-semibold mt-1">~${m.total.toFixed(2)}/serving</p>
+                          <AllergenInfo allergens={detected} />
+                        </div>
+                      </button>
+                    );
+                  })}
                 </div>
               ))}
             </div>
@@ -418,7 +581,10 @@ const MealPlan = () => {
                 <ul className="space-y-1.5 mb-4">
                   {open.ingredients.map((i) => (
                     <li key={i.name} className="text-sm flex justify-between gap-3">
-                      <span className="font-medium">{i.name}</span>
+                      <span className="font-medium">
+                        {i.name}
+                        {isLocalIngredient(i.name) && <LocalBadge />}
+                      </span>
                       <span className="text-muted-foreground tabular-nums">${i.price.toFixed(2)}</span>
                     </li>
                   ))}
@@ -441,6 +607,8 @@ const MealPlan = () => {
                     <li key={i} className="leading-relaxed">{step}</li>
                   ))}
                 </ol>
+                <AllergenInfo allergens={detectAllergens(open.ingredients)} />
+                {recipeHasLocal(open.ingredients) && <LocalFooterNote />}
               </div>
             </article>
           </div>
