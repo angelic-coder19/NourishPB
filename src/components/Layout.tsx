@@ -6,10 +6,10 @@ import StatBanner from "@/components/StatBanner";
 import logoEureka from "@/assets/logo-eureka.png";
 
 const navItems = [
-  { to: "/", label: "Home" },
-  { to: "/create", label: "Create Recipe" },
-  { to: "/meal-plan", label: "Meal Plan" },
-  { to: "/fast-food", label: "Fast Food Cheat Sheet" },
+  { to: "/", label: "Home", tourId: "nav-home" },
+  { to: "/create", label: "Create Recipe", tourId: "nav-create" },
+  { to: "/meal-plan", label: "Meal Plan", tourId: "nav-mealplan" },
+  { to: "/fast-food", label: "Fast Food Cheat Sheet", tourId: "nav-fastfood" },
 ];
 
 const Layout = () => {
@@ -37,6 +37,7 @@ const Layout = () => {
                 key={item.to}
                 to={item.to}
                 end={item.to === "/"}
+                data-tour={item.tourId}
                 className={({ isActive }) =>
                   cn(
                     "px-4 py-2 text-sm font-medium rounded-full transition-colors",

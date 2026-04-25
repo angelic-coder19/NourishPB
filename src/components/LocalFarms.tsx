@@ -76,8 +76,11 @@ const FarmCard = ({
   <button
     type="button"
     onClick={onClick}
-    className="group rounded-2xl bg-white/95 hover:bg-white border border-success/20 p-5 flex flex-col items-center gap-3 text-center transition-all hover:-translate-y-1 shadow-soft hover:shadow-card"
+    className="group relative rounded-2xl bg-white/95 hover:bg-white border border-success/20 p-5 pt-9 flex flex-col items-center gap-3 text-center transition-all hover:-translate-y-1 shadow-soft hover:shadow-card"
   >
+    <span className="absolute top-2 left-2 z-10">
+      <CategoryTag category="Local Farm" />
+    </span>
     <div className="w-20 h-20 rounded-2xl bg-success/10 flex items-center justify-center text-success">
       {icon}
     </div>
@@ -86,9 +89,6 @@ const FarmCard = ({
       <p className="text-xs text-muted-foreground inline-flex items-center gap-1 mt-1">
         <MapPin className="w-3 h-3" /> Pine Bluff, AR
       </p>
-      <span className="mt-2 inline-block">
-        <CategoryTag category="Local Farm" />
-      </span>
       <p className="text-xs text-muted-foreground mt-2 leading-snug">{tip}</p>
     </div>
   </button>

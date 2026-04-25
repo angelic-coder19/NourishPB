@@ -3,7 +3,7 @@ type Category = "Supermarket" | "Local Farm" | "UAPB" | "Food Bank";
 const STYLES: Record<Category, string> = {
   Supermarket: "bg-primary/10 text-primary",
   "Local Farm": "bg-success/15 text-success",
-  UAPB: "bg-secondary/15 text-secondary",
+  UAPB: "bg-yellow-200 text-yellow-900",
   "Food Bank": "bg-accent/20 text-accent-foreground",
 };
 

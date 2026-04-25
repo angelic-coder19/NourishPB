@@ -21,6 +21,12 @@ const STEPS: Step[] = [
       "These are full meals built around foods that are good for your heart. Each one shows the ingredients and how they help.",
   },
   {
+    selector: '[data-tour="killer-meals"]',
+    title: "Meals to Watch",
+    body:
+      "These are popular Pine Bluff dishes with 'killer ingredients' — foods that, eaten often, quietly raise your risk of heart disease. Knowing them helps you choose healthier swaps.",
+  },
+  {
     selector: '[data-tour="herbs"]',
     title: "Healthy Herbs",
     body:
@@ -43,6 +49,24 @@ const STEPS: Step[] = [
     title: "Heart-Healthy Savings",
     body:
       "Tap any coupon for a code you can show at checkout to save money on heart-healthy ingredients.",
+  },
+  {
+    selector: '[data-tour="nav-create"]',
+    title: "Create Recipe Page",
+    body:
+      "Use the Create Recipe tab to type any meal you cook at home. We'll flag heart-risky ingredients and suggest healthier swaps tailored to Pine Bluff.",
+  },
+  {
+    selector: '[data-tour="nav-mealplan"]',
+    title: "Meal Plan Page",
+    body:
+      "The Meal Plan tab builds a 7-day heart-healthy menu for breakfast, lunch, and dinner — featuring local ingredients you can find at the stores above.",
+  },
+  {
+    selector: '[data-tour="nav-fastfood"]',
+    title: "Fast Food Cheat Sheet",
+    body:
+      "Eating out? The Fast Food Cheat Sheet shows the safest menu picks at popular restaurants, ranked by how kind they are to your heart.",
   },
 ];
 
