@@ -91,7 +91,7 @@ const Index = () => {
       <div className="bg-destructive/5" data-tour="killer-meals">
         <Section
           eyebrow="Heart Risks"
-          title="Common Pine Bluff meals to watch"
+          title="Silent Killers"
           subtitle="These local favorites are loved for a reason — but eaten often, their ingredients quietly raise heart disease risk."
         >
           <KillerMeals />
