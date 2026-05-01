@@ -267,6 +267,7 @@ export type FastFoodItem = {
   image: string;
   ingredients: { name: string; effect: string }[];
   hearts: 1 | 2 | 3 | 4 | 5;
+  calories: number;
 };
 
 export const fastFoodItems: FastFoodItem[] = [
@@ -277,6 +278,7 @@ export const fastFoodItems: FastFoodItem[] = [
     meal: "6-inch Grilled Chicken on 9-Grain Wheat",
     image: ffTurkeySub,
     hearts: 5,
+    calories: 350,
     ingredients: [
       { name: "9-Grain wheat bread", effect: "Fiber lowers LDL cholesterol" },
       { name: "Grilled chicken", effect: "Lean protein without saturated fat" },
@@ -292,6 +294,7 @@ export const fastFoodItems: FastFoodItem[] = [
     meal: "Grilled Nuggets + Fruit Cup (or Grilled Cool Wrap)",
     image: ffWrap,
     hearts: 4,
+    calories: 320,
     ingredients: [
       { name: "Grilled chicken", effect: "Lean protein, no frying oils that raise LDL" },
       { name: "Fresh fruit cup", effect: "Antioxidants and fiber reduce inflammation" },
@@ -305,6 +308,7 @@ export const fastFoodItems: FastFoodItem[] = [
     meal: "Roast Turkey Sandwich (no creamy sauce, skip curly fries)",
     image: ffTurkeySub,
     hearts: 4,
+    calories: 380,
     ingredients: [
       { name: "Roast turkey", effect: "Lean protein, low saturated fat" },
       { name: "No creamy sauce", effect: "Avoids extra saturated fat & calories" },
@@ -318,6 +322,7 @@ export const fastFoodItems: FastFoodItem[] = [
     meal: "Oatmeal (no toppings pack) + Side Salad with low-fat dressing",
     image: ffParfait,
     hearts: 3,
+    calories: 290,
     ingredients: [
       { name: "Plain oatmeal", effect: "Beta-glucan fiber actively lowers LDL" },
       { name: "Skip toppings pack", effect: "Avoids added sugar that raises triglycerides" },
@@ -332,6 +337,7 @@ export const fastFoodItems: FastFoodItem[] = [
     meal: "Black Beans & Rice + Fresco-style Chicken Soft Taco",
     image: ffBeanBowl,
     hearts: 3,
+    calories: 430,
     ingredients: [
       { name: "Black beans", effect: "Plant protein and fiber lower BP" },
       { name: "Rice", effect: "Carbs for energy without fryer oils" },
