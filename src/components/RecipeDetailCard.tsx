@@ -1,5 +1,5 @@
 import { Meal } from "@/data/content";
-import { ChefHat, DollarSign, Sparkles } from "lucide-react";
+import { ChefHat, DollarSign, Sparkles, Flame } from "lucide-react";
 import { detectAllergens, isLocalIngredient, recipeHasLocal } from "@/lib/allergens";
 import AllergenInfo from "./AllergenInfo";
 import { LocalBadge, LocalFooterNote } from "./LocalBadge";
@@ -17,9 +17,14 @@ const RecipeDetailCard = ({ meal }: { meal: Meal }) => {
         <div className="p-6 space-y-5">
           <div>
             <h3 className="font-display text-2xl font-semibold">{meal.name}</h3>
-            <div className="inline-flex items-center gap-1.5 mt-2 text-sm font-medium text-success">
-              <DollarSign className="w-4 h-4" />
-              Estimated total: ${total.toFixed(2)}
+            <div className="flex flex-wrap items-center gap-2 mt-2">
+              <span className="inline-flex items-center gap-1.5 text-sm font-medium text-success">
+                <DollarSign className="w-4 h-4" />
+                Estimated total: ${total.toFixed(2)}
+              </span>
+              <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-success/10 text-success text-xs font-semibold">
+                <Flame className="w-3 h-3" /> {meal.calories} cal
+              </span>
             </div>
           </div>
 

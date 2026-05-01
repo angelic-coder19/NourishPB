@@ -1,5 +1,5 @@
 import { Meal } from "@/data/content";
-import { Sparkles, ShoppingCart, ExternalLink } from "lucide-react";
+import { Sparkles, ShoppingCart, ExternalLink, Flame } from "lucide-react";
 import { detectAllergens, isLocalIngredient, recipeHasLocal } from "@/lib/allergens";
 import AllergenInfo from "./AllergenInfo";
 import { LocalBadge, LocalFooterNote } from "./LocalBadge";
@@ -21,7 +21,12 @@ const MealCard = ({ meal }: { meal: Meal }) => {
         />
       </div>
       <div className="p-5">
-        <h3 className="font-display text-xl font-semibold mb-3">{meal.name}</h3>
+        <div className="flex items-start justify-between gap-3 mb-3">
+          <h3 className="font-display text-xl font-semibold">{meal.name}</h3>
+          <span className="shrink-0 inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-success/10 text-success text-xs font-semibold">
+            <Flame className="w-3 h-3" /> {meal.calories} cal
+          </span>
+        </div>
         <div className="flex items-center gap-2 text-xs uppercase tracking-wider text-secondary font-semibold mb-2">
           <Sparkles className="w-3.5 h-3.5" />
           Core Ingredients

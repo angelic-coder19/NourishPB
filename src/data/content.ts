@@ -29,6 +29,7 @@ export type Meal = {
   ingredients: Ingredient[];
   instructions: string[];
   cost: number;
+  calories: number;
   tags?: string[];
 };
 
@@ -38,6 +39,7 @@ export const meals: Meal[] = [
     name: "Lemon-Herb Grilled Salmon",
     image: mealSalmon,
     cost: 9.8,
+    calories: 520,
     tags: ["dinner", "omega-3"],
     ingredients: [
       { name: "Wild salmon fillet (6 oz)", effect: "Omega-3 fatty acids lower triglycerides and blood pressure", price: 6.49 },
@@ -58,6 +60,7 @@ export const meals: Meal[] = [
     name: "Mediterranean Chickpea Bowl",
     image: mealChickpea,
     cost: 4.6,
+    calories: 480,
     tags: ["lunch", "fiber"],
     ingredients: [
       { name: "Chickpeas (1 can)", effect: "Soluble fiber lowers cholesterol absorption", price: 1.19 },
@@ -77,6 +80,7 @@ export const meals: Meal[] = [
     name: "Berry Walnut Overnight Oats",
     image: mealOatmeal,
     cost: 2.4,
+    calories: 360,
     tags: ["breakfast", "fiber"],
     ingredients: [
       { name: "Rolled oats (½ cup)", effect: "Beta-glucan fiber actively lowers LDL", price: 0.35 },
@@ -95,6 +99,7 @@ export const meals: Meal[] = [
     name: "Garden Lentil Soup",
     image: mealLentil,
     cost: 3.2,
+    calories: 410,
     tags: ["dinner", "lunch"],
     ingredients: [
       { name: "Green lentils", effect: "Plant protein + fiber lowers blood pressure", price: 0.75 },
@@ -262,6 +267,7 @@ export type FastFoodItem = {
   image: string;
   ingredients: { name: string; effect: string }[];
   hearts: 1 | 2 | 3 | 4 | 5;
+  calories: number;
 };
 
 export const fastFoodItems: FastFoodItem[] = [
@@ -272,6 +278,7 @@ export const fastFoodItems: FastFoodItem[] = [
     meal: "6-inch Grilled Chicken on 9-Grain Wheat",
     image: ffTurkeySub,
     hearts: 5,
+    calories: 350,
     ingredients: [
       { name: "9-Grain wheat bread", effect: "Fiber lowers LDL cholesterol" },
       { name: "Grilled chicken", effect: "Lean protein without saturated fat" },
@@ -287,6 +294,7 @@ export const fastFoodItems: FastFoodItem[] = [
     meal: "Grilled Nuggets + Fruit Cup (or Grilled Cool Wrap)",
     image: ffWrap,
     hearts: 4,
+    calories: 320,
     ingredients: [
       { name: "Grilled chicken", effect: "Lean protein, no frying oils that raise LDL" },
       { name: "Fresh fruit cup", effect: "Antioxidants and fiber reduce inflammation" },
@@ -300,6 +308,7 @@ export const fastFoodItems: FastFoodItem[] = [
     meal: "Roast Turkey Sandwich (no creamy sauce, skip curly fries)",
     image: ffTurkeySub,
     hearts: 4,
+    calories: 380,
     ingredients: [
       { name: "Roast turkey", effect: "Lean protein, low saturated fat" },
       { name: "No creamy sauce", effect: "Avoids extra saturated fat & calories" },
@@ -313,6 +322,7 @@ export const fastFoodItems: FastFoodItem[] = [
     meal: "Oatmeal (no toppings pack) + Side Salad with low-fat dressing",
     image: ffParfait,
     hearts: 3,
+    calories: 290,
     ingredients: [
       { name: "Plain oatmeal", effect: "Beta-glucan fiber actively lowers LDL" },
       { name: "Skip toppings pack", effect: "Avoids added sugar that raises triglycerides" },
@@ -327,6 +337,7 @@ export const fastFoodItems: FastFoodItem[] = [
     meal: "Black Beans & Rice + Fresco-style Chicken Soft Taco",
     image: ffBeanBowl,
     hearts: 3,
+    calories: 430,
     ingredients: [
       { name: "Black beans", effect: "Plant protein and fiber lower BP" },
       { name: "Rice", effect: "Carbs for energy without fryer oils" },

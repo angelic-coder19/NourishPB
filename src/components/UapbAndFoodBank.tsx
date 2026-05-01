@@ -2,6 +2,8 @@ import { useState } from "react";
 import { MapPin, Phone, Mail, Fish, HeartHandshake } from "lucide-react";
 import Modal from "./Modal";
 import CategoryTag from "./CategoryTag";
+import tilapiaImg from "@/assets/uapb-tilapia.jpg";
+import catfishImg from "@/assets/uapb-catfish.jpg";
 
 const UAPB_SCHOOL_LOGO =
   "https://yt3.googleusercontent.com/ytc/AIdro_kcKQIGxm-eeOJwJHYqLzKq4fYGIB4sdreWT728qe3cjA=s900-c-k-c0x00ffffff-no-rj";
@@ -9,10 +11,8 @@ const UAPB_SCHOOL_LOGO =
 const UAPB_LONOKE_LOGO =
   "https://yt3.googleusercontent.com/_ld56qLHNlFr-sjM0EuAyZioyROEjzmYcElxbFfZXH37FBk1Few_AZ1rvm_GhGUUJASp7dWO6Q=s900-c-k-c0x00ffffff-no-rj";
 
-const TILAPIA_IMG =
-  "https://images.unsplash.com/photo-1559717865-a99cac1c95d8?auto=format&fit=crop&w=400&q=70";
-const CATFISH_IMG =
-  "https://upload.wikimedia.org/wikipedia/commons/thumb/2/2b/Channel_catfish.jpg/640px-Channel_catfish.jpg";
+const TILAPIA_IMG = tilapiaImg;
+const CATFISH_IMG = catfishImg;
 
 const Tile = ({
   logo,
@@ -200,7 +200,7 @@ export const UapbAndFoodBank = () => {
         </p>
         <div className="space-y-5">
           <div className="rounded-xl bg-muted/40 p-4">
-            <p className="font-semibold text-sm mb-1">Dr. Grace Ramena</p>
+            <p className="font-semibold text-sm mb-1 text-primary">Dr. Grace Ramena</p>
             <p className="text-xs text-muted-foreground mb-3">
               Fish Pathology, Assistant Professor · Director, Fish Health and Disease Diagnostic Lab
             </p>
@@ -213,7 +213,7 @@ export const UapbAndFoodBank = () => {
             />
           </div>
           <div className="rounded-xl bg-muted/40 p-4">
-            <p className="font-semibold text-sm mb-1">Ms. Tiffany Schafer</p>
+            <p className="font-semibold text-sm mb-1 text-primary">Ms. Tiffany Schafer</p>
             <p className="text-xs text-muted-foreground mb-3">Administrative Specialist II</p>
             <Contact
               address="2001 Highway 70 East, Lonoke, AR 72086"
