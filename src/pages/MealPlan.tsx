@@ -17,6 +17,7 @@ type PlanMeal = {
   image: string;
   ingredients: { name: string; price: number }[];
   total: number;
+  calories: number;
   instructions: string[];
   searchTerm: string;
 };
@@ -33,6 +34,7 @@ const breakfastOptions: PlanMeal[] = [
       { name: "Walnuts", price: 0.6 },
     ],
     total: 2.2,
+    calories: 320,
     instructions: [
       "Bring 1 cup water to a boil and stir in oats.",
       "Simmer 5 minutes until creamy.",
@@ -50,6 +52,7 @@ const breakfastOptions: PlanMeal[] = [
       { name: "Olive oil", price: 0.5 },
     ],
     total: 4.5,
+    calories: 380,
     instructions: [
       "Toast 2 slices of whole grain bread.",
       "Cook eggs in olive oil to your liking.",
@@ -67,6 +70,7 @@ const breakfastOptions: PlanMeal[] = [
       { name: "Honey", price: 0.2 },
     ],
     total: 2.55,
+    calories: 290,
     instructions: [
       "Spoon yogurt into a bowl.",
       "Top with walnuts and a drizzle of honey.",
@@ -84,6 +88,7 @@ const breakfastOptions: PlanMeal[] = [
       { name: "Olive oil", price: 0.3 },
     ],
     total: 4.7,
+    calories: 360,
     instructions: [
       "Toast 2 slices of whole grain bread.",
       "Mash avocado with lemon and pepper; spread on toast.",
@@ -102,6 +107,7 @@ const breakfastOptions: PlanMeal[] = [
       { name: "Honey", price: 0.2 },
     ],
     total: 2.7,
+    calories: 280,
     instructions: [
       "Mix chia and almond milk; refrigerate 4+ hours.",
       "Top with blueberries and a drizzle of honey.",
@@ -119,6 +125,7 @@ const breakfastOptions: PlanMeal[] = [
       { name: "Olive oil", price: 0.3 },
     ],
     total: 3.9,
+    calories: 340,
     instructions: [
       "Sauté spinach and tomatoes in olive oil 2 minutes.",
       "Add beaten eggs; scramble until just set.",
@@ -140,6 +147,7 @@ const lunchOptions: PlanMeal[] = [
       { name: "Olive oil", price: 0.5 },
     ],
     total: 4.26,
+    calories: 520,
     instructions: [
       "Cook brown rice per package instructions.",
       "Sauté garlic in olive oil 2 minutes.",
@@ -158,6 +166,7 @@ const lunchOptions: PlanMeal[] = [
       { name: "Olive oil", price: 0.5 },
     ],
     total: 6.5,
+    calories: 450,
     instructions: [
       "Grill seasoned chicken 6 minutes per side.",
       "Slice over greens.",
@@ -176,6 +185,7 @@ const lunchOptions: PlanMeal[] = [
       { name: "Garlic", price: 0.3 },
     ],
     total: 2.7,
+    calories: 380,
     instructions: [
       "Sauté carrots and garlic 5 minutes.",
       "Add lentils and low-sodium broth; simmer 25 min.",
@@ -194,6 +204,7 @@ const lunchOptions: PlanMeal[] = [
       { name: "Olive oil", price: 0.5 },
     ],
     total: 4.08,
+    calories: 480,
     instructions: [
       "Toast chickpeas in olive oil 5 minutes.",
       "Massage kale with lemon juice and salt.",
@@ -212,6 +223,7 @@ const lunchOptions: PlanMeal[] = [
       { name: "Cilantro", price: 0.5 },
     ],
     total: 5.28,
+    calories: 540,
     instructions: [
       "Roast diced sweet potato at 400°F for 20 minutes.",
       "Warm black beans with cumin and garlic.",
@@ -230,6 +242,7 @@ const lunchOptions: PlanMeal[] = [
       { name: "Olive oil", price: 0.5 },
     ],
     total: 5.25,
+    calories: 410,
     instructions: [
       "Drain tuna and beans; combine in a bowl.",
       "Toss with greens, olive oil, and lemon.",
@@ -247,6 +260,7 @@ const lunchOptions: PlanMeal[] = [
       { name: "Olive oil", price: 0.5 },
     ],
     total: 3.95,
+    calories: 460,
     instructions: [
       "Cook quinoa per package.",
       "Roast broccoli and carrots at 425°F for 18 minutes.",
@@ -269,6 +283,7 @@ const dinnerOptions: PlanMeal[] = [
       { name: "Brown rice", price: 1.5 },
     ],
     total: 11.25,
+    calories: 580,
     instructions: [
       "Preheat oven to 400°F.",
       "Season salmon with lemon, garlic, herbs.",
@@ -291,6 +306,7 @@ const dinnerOptions: PlanMeal[] = [
       { name: "Brown rice", price: 1.5 },
     ],
     total: 11.73,
+    calories: 620,
     instructions: [
       "Brown ground turkey in olive oil with onion and garlic.",
       "Add low-sodium broth, simmer 10 minutes.",
@@ -311,6 +327,7 @@ const dinnerOptions: PlanMeal[] = [
       { name: "Olive oil", price: 0.75 },
     ],
     total: 7.23,
+    calories: 540,
     instructions: [
       "Sauté garlic in olive oil 1 minute.",
       "Add chicken; cook 6 minutes per side.",
@@ -329,6 +346,7 @@ const dinnerOptions: PlanMeal[] = [
       { name: "Olive oil", price: 0.5 },
     ],
     total: 8.5,
+    calories: 560,
     instructions: [
       "Season catfish with paprika, garlic powder, pepper.",
       "Bake at 400°F for 12 minutes.",
@@ -348,6 +366,7 @@ const dinnerOptions: PlanMeal[] = [
       { name: "Brown rice", price: 1.5 },
     ],
     total: 7.95,
+    calories: 490,
     instructions: [
       "Sauté onion, garlic, tomatoes 6 minutes.",
       "Nestle tilapia in sauce; cover and cook 8 minutes.",
@@ -367,6 +386,7 @@ const dinnerOptions: PlanMeal[] = [
       { name: "Brown rice", price: 1.5 },
     ],
     total: 7.5,
+    calories: 470,
     instructions: [
       "Press and cube tofu; sear 4 minutes.",
       "Stir-fry broccoli, peppers, ginger 5 minutes.",
@@ -386,6 +406,7 @@ const dinnerOptions: PlanMeal[] = [
       { name: "Cayenne pepper", price: 0.25 },
     ],
     total: 8.75,
+    calories: 520,
     instructions: [
       "Brown turkey with onion 6 minutes.",
       "Add tomatoes, beans, spices; simmer 25 minutes.",
@@ -404,6 +425,7 @@ const dinnerOptions: PlanMeal[] = [
       { name: "Tomatoes", price: 0.9 },
     ],
     total: 9.4,
+    calories: 510,
     instructions: [
       "Halve and seed peppers.",
       "Brown turkey with diced tomatoes and rice.",
