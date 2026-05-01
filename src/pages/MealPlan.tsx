@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from "react";
-import { Download, Sparkles, X, ShoppingCart, ExternalLink, AlertTriangle } from "lucide-react";
+import { Download, Sparkles, X, ShoppingCart, ExternalLink, AlertTriangle, Flame } from "lucide-react";
 import jsPDF from "jspdf";
 import html2canvas from "html2canvas";
 import { toast } from "@/hooks/use-toast";
@@ -784,7 +784,12 @@ const MealPlan = () => {
                             {local && <LocalBadge />}
                           </p>
                           <p className="text-xs text-muted-foreground mt-1 leading-snug line-clamp-2">{m.description}</p>
-                          <p className="text-xs text-primary font-semibold mt-1">~${m.total.toFixed(2)}/serving</p>
+                          <div className="flex items-center gap-2 mt-1.5 flex-wrap">
+                            <span className="text-xs text-primary font-semibold">~${m.total.toFixed(2)}/serving</span>
+                            <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-success/10 text-success text-[10px] font-semibold">
+                              <Flame className="w-2.5 h-2.5" /> {m.calories} cal
+                            </span>
+                          </div>
                           <AllergenInfo allergens={detected} />
                         </div>
                       </button>
@@ -815,7 +820,12 @@ const MealPlan = () => {
                 <img src={open.image} alt={open.name} className="w-full h-full object-cover" />
               </div>
               <div className="p-6">
-                <h3 className="font-display text-2xl font-semibold mb-4">{open.name}</h3>
+                <div className="flex items-start justify-between gap-3 mb-4">
+                  <h3 className="font-display text-2xl font-semibold">{open.name}</h3>
+                  <span className="shrink-0 inline-flex items-center gap-1 px-3 py-1.5 rounded-full bg-success/10 text-success text-sm font-semibold">
+                    <Flame className="w-4 h-4" /> {open.calories} cal
+                  </span>
+                </div>
                 <div className="text-xs uppercase tracking-wider text-secondary font-semibold mb-2">Core Ingredients</div>
                 <ul className="space-y-1.5 mb-4">
                   {open.ingredients.map((i) => (
