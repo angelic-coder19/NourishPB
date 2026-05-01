@@ -29,6 +29,7 @@ export type Meal = {
   ingredients: Ingredient[];
   instructions: string[];
   cost: number;
+  calories: number;
   tags?: string[];
 };
 
@@ -38,6 +39,7 @@ export const meals: Meal[] = [
     name: "Lemon-Herb Grilled Salmon",
     image: mealSalmon,
     cost: 9.8,
+    calories: 520,
     tags: ["dinner", "omega-3"],
     ingredients: [
       { name: "Wild salmon fillet (6 oz)", effect: "Omega-3 fatty acids lower triglycerides and blood pressure", price: 6.49 },
@@ -58,6 +60,7 @@ export const meals: Meal[] = [
     name: "Mediterranean Chickpea Bowl",
     image: mealChickpea,
     cost: 4.6,
+    calories: 480,
     tags: ["lunch", "fiber"],
     ingredients: [
       { name: "Chickpeas (1 can)", effect: "Soluble fiber lowers cholesterol absorption", price: 1.19 },
@@ -77,6 +80,7 @@ export const meals: Meal[] = [
     name: "Berry Walnut Overnight Oats",
     image: mealOatmeal,
     cost: 2.4,
+    calories: 360,
     tags: ["breakfast", "fiber"],
     ingredients: [
       { name: "Rolled oats (½ cup)", effect: "Beta-glucan fiber actively lowers LDL", price: 0.35 },
@@ -95,6 +99,7 @@ export const meals: Meal[] = [
     name: "Garden Lentil Soup",
     image: mealLentil,
     cost: 3.2,
+    calories: 410,
     tags: ["dinner", "lunch"],
     ingredients: [
       { name: "Green lentils", effect: "Plant protein + fiber lowers blood pressure", price: 0.75 },
