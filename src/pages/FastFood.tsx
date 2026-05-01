@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Heart } from "lucide-react";
+import { Heart, Flame } from "lucide-react";
 import { fastFoodItems, FastFoodItem } from "@/data/content";
 
 const HeartRating = ({ value }: { value: number }) => (
@@ -29,7 +29,12 @@ const FFCard = ({ item }: { item: FastFoodItem }) => (
     </div>
     <div className="p-5">
       <p className="text-xs uppercase tracking-wider text-muted-foreground font-semibold">{item.restaurant}</p>
-      <h3 className="font-display text-lg font-semibold mt-1 mb-3">{item.meal}</h3>
+      <div className="flex items-start justify-between gap-2 mt-1 mb-3">
+        <h3 className="font-display text-lg font-semibold">{item.meal}</h3>
+        <span className="shrink-0 inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-success/10 text-success text-xs font-semibold">
+          <Flame className="w-3 h-3" /> {item.calories} cal
+        </span>
+      </div>
       <ul className="space-y-1.5 text-sm">
         {item.ingredients.map((ing) => (
           <li key={ing.name} className="flex gap-2">
