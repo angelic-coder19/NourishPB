@@ -1,150 +1,191 @@
-# HeartWise Plates
+# NourishPB
 
-SPEC
+NourishPB is a community-focused web application designed to help Pine Bluff residents make more heart-healthy food choices while working within real-world constraints such as budget, available ingredients, and access to local food options.
 
-We are Project Eureka competing in an Innovation Sprint to solve challenges that are being faced in the Pine Bluff community. Our specific problem statement is
+The project was developed by **Project Eureka** during an Innovation Sprint centered around the challenge:
 
-“Promoting Heart Disease Prevention by Increasing Awareness of Healthy food Choices in Pine Bluff”
+> **“Promoting Heart Disease Prevention by Increasing Awareness of Healthy Food Choices in Pine Bluff.”**
 
-We have decided to build a website that provides information about healthy food choices. We plan on doing this by displaying healthy recipes, creating budgets using latest prices from the supermarket chains in the pine bluff, create meal plans and suggest healthy options from the local fast-food chains.
+Instead of approaching healthy eating as simply a matter of telling people what foods are good or bad, we designed NourishPB around a more practical question: **How can we make healthier choices easier with the money, ingredients, restaurants, and stores people already have access to?**
 
-Our website has four tabs
+## Why We Built It
 
-1.        Home
+Healthy eating recommendations are only useful when they are realistic.
 
--            Has links to all the other pages
+Someone may want to eat healthier but have a limited grocery budget, only a few ingredients at home, or need to grab food quickly from a local fast-food restaurant. These constraints shaped how we approached NourishPB.
 
--            Has a short sentence that describes a statistic/phrase on how unhealthy foods can increase the risk of heart disease
+The platform brings several tools into one experience:
 
--            The first section has a subheading titled “Healthy Meals”
+* heart-healthy food education
+* budget-based recipe discovery
+* ingredient-based meal recommendations
+* personalized meal planning
+* healthier fast-food alternatives
+* links to local grocery options
 
--            Right underneath, there are cards
+Our goal was to move beyond simply providing health information and instead help users turn that information into everyday decisions.
 
- 
+## Core Features
 
-Card
+### Heart-Healthy Food Discovery
 
-Contains
+The home page introduces users to foods and ingredients associated with heart-conscious eating.
 
-1.        Picture of the meal
+Content is organized into sections for:
 
-2.        Name of the meal right underneath
+* healthy meals
+* herbs
+* fruits
+* local shopping options
 
-3.        Heading: Core Ingredients (the main ingredients scientifically proven to prevent heart disease). Followed by bullet points of each of those ingredients with a short phrase on its exact effect/role in fighting heart disease
+Meal cards highlight core ingredients and explain their role in a heart-conscious diet, while herb and fruit cards provide information about their potential benefits and practical ways they can be incorporated into meals.
 
--            The next section has the subheading titled “Healthy Herbs”
+This design makes health information part of the food-discovery experience rather than separating education from action.
 
--            Right underneath there are cards this time displaying the
+### Budget-Based Recipe Discovery
 
- 
+One of the central ideas behind NourishPB is helping users answer:
 
-Card
+**“What healthy meal can I make with the money I have?”**
 
-Contains
+Users can enter their available grocery budget, and the application is designed to recommend meals whose ingredients fit within that constraint.
 
-1.        Picture of the Herb
+Recipe results can include:
 
-2.        Name of the Herb underneath
+* meal information
+* core ingredients
+* estimated ingredient prices
+* heart-health information
+* step-by-step cooking instructions
 
-3.        Bullet points with a bolded title “What it does” with short phrases on its exact effect/role in fighting heart disease
+The long-term goal is to connect this feature to current pricing from grocery stores serving Pine Bluff so recommendations reflect realistic local costs.
 
-4.        Another bullet points under a bolded title “How to take it” with short phrases to how to take it
+### Ingredient-Based Recipe Recommendations
 
--            The next section has the heading titled “Healthy Fruits”
+NourishPB also explores the opposite problem: instead of starting with money, what if someone already has food at home?
 
--            This section will inherit the same version of the cards from healthy herbs
+The ingredient-based recipe experience allows users to provide the ingredients they currently have and receive meal suggestions based on those ingredients.
 
--            The next section Is “Where to shop”
+The concept was designed to eventually support multiple forms of input:
 
--            This section will have images of the stores (the one’s In Pine bluff) with links to that store
+* typed ingredients
+* voice input
+* images of available food
 
-2.        Create Recipe
+When potentially less heart-conscious ingredients are identified, the system can explain why they may be worth limiting and suggest healthier alternatives or meals using the remaining ingredients.
 
-This page will have two sections:
+This feature is intended as an educational and meal-discovery tool rather than a substitute for professional medical or nutritional advice.
 
-a.        Titled “From Money”
+### Personalized Meal Planning
 
-An input box with a dollar sign and space to input the amount that a user has to buy
+The Meal Plan feature extends individual recipe recommendations into structured daily or weekly plans.
 
-When a user submits the amount, A card should be returned on the screen showing the picture of the meal, core ingredients with phrases described above, with prices of those ingredients from our local database, and the bullet points with process of cooking the meal titled “instructions”
+Users can customize a plan based on:
 
-b.       Titled “Form Ingredients”
+* budget
+* number of people
+* group type
+* planning period
+* breakfast, lunch, and/or dinner
 
-This section has a textbox like one an chatgt where the user has the option to speak, take an image, or text of the ingredients they have.
+The system is designed to generate a timetable where each meal can be expanded to display its ingredients, health information, estimated cost, and preparation instructions.
 
- 
+Potential use cases include meal planning for:
 
-The output will be conditional
+* individuals
+* families
+* schools
+* community organizations
 
-                                      If there is any ingredients that are unhealthy, it returns two cards:
+The design also includes the ability to export generated plans as a PDF, making them easier to save, print, or share.
 
-1.        A warning card that lists out the harmful ingredients and why they are harmful in causing Heart Disease
+### Fast Food Cheat Sheet
 
-2.        A card (inheriting the card format from the “From Money”) with a meal showing ingredients that are healthy in the input.
+One of the most important design decisions in NourishPB was recognizing that improving nutrition does not necessarily mean eliminating fast food.
 
-If there are no unhealthy ingredients:
+The **Fast Food Cheat Sheet** helps users identify more heart-conscious options at restaurants they may already visit around Pine Bluff.
 
-               It will return a healthy meal card with the format from the “From money” section with the ingredients the user entered
+Each recommendation can include:
 
-3. Meal Plan
+* restaurant information
+* meal image
+* relevant ingredients
+* nutritional context
+* explanation of healthier components
+* a simple heart-based rating
 
-This page allows users to generate meal plans from a set of parameters. These parameters are:
+Rather than presenting food choices as strictly "healthy" or "unhealthy," the feature is designed to help users make **better choices within their existing habits and circumstances**.
 
--            A dropdown menu with options to pick for family, individual, school or organization. This is the group of people being considered from the meal plan
+## Local-First Design
 
-The rest of the inputs are dependent on which option was selected in the above dropdown
+NourishPB was designed specifically around the Pine Bluff community rather than as a generic nutrition application.
 
--            Budget: An amount with a dollar sign to enter money available
+That influenced several product decisions, including:
 
--            Number of people: An integer box to enter the number of people
+* considering prices at stores accessible to local residents
+* linking users to nearby grocery options
+* highlighting choices from fast-food restaurants available locally
+* designing recommendations around realistic budgets
+* considering future partnerships with local food producers and organizations
 
--            Period: A dropdown menu with options: daily and weekly
+This local-first approach was important because food accessibility is affected by more than nutritional knowledge. Cost, transportation, availability, and convenience all influence what people are realistically able to eat.
 
--            Meals: A dropdown menu with options: breakfast, lunch and dinner (radio buttons which many can be selected)
 
-The output of this page is timetable depending on what Period options and meals option was. This will be a pretty table with rows representing the meals and the columns representing the day(s). Each box should be a card just like the card from the Healthy Meals section on the home page. When clicked this card should expand and show the Card from the “From Money” section of the create recipe page for that meal, thus a detailed instructions bullet.  This page has the option to be downloadable in PDF format.
+## Future Development
 
- 
+Future versions of NourishPB could expand the prototype with:
 
-4  Fast Food Cheat Sheet
+* persistent user accounts and preferences
+* real-time or regularly updated local grocery pricing
+* grocery store and location APIs
+* nutrition database integration
+* AI-powered meal recommendations
+* image-based ingredient recognition
+* voice-based ingredient entry
+* dietary preference and allergy filtering
+* personalized weekly meal plans
+* downloadable meal-plan PDFs
+* grocery lists generated from meal plans
+* nutrition comparisons between meals
+* local restaurant menu integrations
+* accessibility improvements
+* mobile-first optimization
 
--            This page has a large font that has the text “Healthy Choices from your unhealthy vices”
+A larger version of the platform could also integrate local food resources, farms, community organizations, and other Pine Bluff initiatives to make recommendations even more relevant to residents.
 
--            This page is about showing the healthy options that promote heart health/ or do not deteriorate it from the fast-food restaurants in Pine Bluff.
+## Project Status
 
--            This page should have five cards loaded at a time.
+NourishPB is currently a **prototype** developed to explore how technology can support healthier food decisions in Pine Bluff.
 
--            Each card should include a small circle in the left corner with the logo of the fast-food restaurant
 
--            The image of the meal from the website
+## Running the Project Locally
 
--            Bullet points that list Some core ingredients (if any) that promote heart Health with a description of what they do in that respect.
+### Prerequisites
 
--            More can be loaded if the more button is clicked.
+Make sure Node.js and npm are installed.
 
-In the right corner there should be a heart representing how healthy the option is. Five heats being the most healthy and one being the least.
+Clone the repository:
 
-You as an expert sofware engineer, are tasked with creating a prototype. the app should use the best UI features and look visually pleasing.
-
-This project was built with [Lovable](https://lovable.dev).
-
-**Live app**: https://heart-happy-helper.lovable.app
-
-## Build with Lovable
-
-Continue developing this project in the [Lovable editor](https://lovable.dev/projects/4c41811f-873b-4dd3-9377-e20de8d49bae).
-
-- **Ship faster**: describe what you want to build and Lovable handles the code.
-- **Stay in sync**: every change made in Lovable is committed straight to this repository.
-- **Full ownership**: this code is yours. Push to `main` on GitHub and your changes sync back into Lovable, ready for your next prompt.
-
-## Development
-
-Prefer working locally? You need Node.js and npm — [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating).
-
-```sh
-git clone <this-repository-url>
+```bash
+git clone <repository-url>
 cd <repository-name>
-npm i
+```
+
+Install dependencies:
+
+```bash
+npm install
+```
+
+Start the development server:
+
+```bash
 npm run dev
 ```
+
+## Live Demo
+
+NourishPB can be viewed here:
+
+
+https://heart-happy-helper.lovable.app
