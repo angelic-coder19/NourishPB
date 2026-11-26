@@ -2,6 +2,13 @@
 
 NourishPB is a community-focused web application designed to help Pine Bluff residents make more heart-healthy food choices while working within real-world constraints such as budget, available ingredients, and access to local food options.
 
+## Live Demo
+
+NourishPB can be viewed here:
+
+
+https://heart-happy-helper.lovable.app
+
 The project was developed by **Project Eureka** during an Innovation Sprint centered around the challenge:
 
 > **“Promoting Heart Disease Prevention by Increasing Awareness of Healthy Food Choices in Pine Bluff.”**
@@ -183,9 +190,4 @@ Start the development server:
 npm run dev
 ```
 
-## Live Demo
 
-NourishPB can be viewed here:
-
-
-https://heart-happy-helper.lovable.app
